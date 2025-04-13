@@ -1,0 +1,5 @@
+{
+    "git.enableCommitSigning": true,
+    "jira-plugin.workingProject": "",
+    "scm.alwaysShowRepositories": false
+}
