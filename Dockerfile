@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM python:3.13.3-alpine3.21
 
 COPY LICENSE README.md entrypoint.sh /
 

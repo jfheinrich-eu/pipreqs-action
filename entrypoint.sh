@@ -11,6 +11,6 @@ git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
 git diff --exit-code --stat && exit 0
 
-git add -A
-git commit -m "Updated $INPUT_PROJECT_NAME requirements file"
+git add $INPUT_REQUIREMENT_PATH
+git commit -m "Updated $INPUT_PROJECT_NAME requirements file [skip-ci]"
 git push -u origin HEAD
