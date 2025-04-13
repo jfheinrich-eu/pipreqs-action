@@ -30,7 +30,6 @@ jobs:
   check-pr:
     needs: generate-pr-description
     name: Validate Release Label and Notes
-    if: github.ref == 'ref/head/main'
     runs-on: ubuntu-latest
     defaults:
       run:
