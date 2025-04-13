@@ -1,6 +1,6 @@
 name: "Automatic requirements.txt for Python Projects"
 description: "This action will automatically create the requirements.txt file for a python project using the pipreqs tool."
-author: "Ryan Rozario"
+author: "Ryan Rozario, Joerg Heinrich"
 
 inputs:
   PROJECT_PATH:
@@ -17,11 +17,10 @@ inputs:
     required: true
     default: ""
 
-
 runs:
   using: "docker"
   image: "Dockerfile"
-  
+
 branding:
-  icon: 'code'
-  color: 'yellow'
+  icon: "code"
+  color: "yellow"
