@@ -18,14 +18,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Automatic requirements.txt for Python Project
-        uses: ryan-rozario/pipreqs-action@master
+        uses: jfheinrich-eu/pipreqs-action@master
 
         # Put an example of mandatory inputs here
         with:
           PROJECT_PATH: project_folder   #default is the root of the repository
-          REQUIREMENT_PATH: project_folder/requirements.txt  #default is requirement.txt in the root of your repository 
+          REQUIREMENT_PATH: project_folder/requirements.txt  #default is requirement.txt in the root of your repository
 ```
 
 ### Inputs
@@ -35,3 +35,9 @@ jobs:
 | `PROJECT_PATH`  | Gives the path to the project folder that contains the python files    |  .
 | `REQUIREMENT_PATH`  | Gives the path to the location where requirements.txt has to be saved, including the requirements.txt file name    | requirements.txt|
 | `PROJECT_NAME`  | Includes the project name in the commit  | project_name |
+
+
+## Authors
+- [@ryan-rozario](https://github.com/ryan-rozario) - Idea & Initial work [ryan-rozario/pipreqs-action](https://github.com/ryan-rozario/pipreqs-action)
+- [@afonsoVale](https://github.com/afonsoVale) - Contributor [ryan-rozario/pipreqs-action](https://github.com/ryan-rozario/pipreqs-action)
+- [@jfheinrich](https://github.com/jfheinrich) - Contributor on this fork
