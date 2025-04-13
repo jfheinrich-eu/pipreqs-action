@@ -1,5 +1,14 @@
 # Automatic requirement.txt for Python Projects on Github
 
+## Table of Contents
+
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Usage](#usage)
+- [Contributing](../CONTRIBUTING.md)
+
+## About <a name = "about"></a>
+
 [pipreqs](https://github.com/bndr/pipreqs) - Generates pip requirements.txt file based on imports of any project.
 
 This action will automatically create the requirements.txt file for a python project using the pipreqs tool.
@@ -7,7 +16,7 @@ This action will automatically create the requirements.txt file for a python pro
 You can specify the location of your project folder that contains all the python files within your repository.
 You can specify the path to which your requirement.txt has to be saved.
 
-## Usage
+## Usage <a name = "usage"></a>
 
 ### Example workflow
 
