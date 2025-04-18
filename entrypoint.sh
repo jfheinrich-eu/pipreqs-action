@@ -11,16 +11,13 @@ git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
 git diff --exit-code --stat $INPUT_REQUIREMENT_PATH && exit 0
 
-git remote remove origin
-git remote add origin "https://${INPUT_TOKEN}@github.com/${INPUT_REPOSITORY}.git"
+git remote set-url origin "https://${INPUT_TOKEN}@github.com/${INPUT_REPOSITORY}.git"
 
 git add $INPUT_REQUIREMENT_PATH
 git commit -m "Updated $INPUT_PROJECT_NAME requirements file [skip-ci]"
 
 if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
-    push_to="$GITHUB_HEAD_REF"
+    git push origin $GITHUB_HEAD_REF
 else
-    push_to="$GITHUB_REF_NAME"
+    git push origin $GITHUB_REF_NAME
 fi
-
-git push --verbose origin $push_to
