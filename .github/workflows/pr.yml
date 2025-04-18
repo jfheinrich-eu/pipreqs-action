@@ -6,6 +6,7 @@ on:
 
 jobs:
   generate-pr-description:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Generate the description on the pull request
     runs-on: ubuntu-latest
     defaults:
@@ -28,6 +29,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   check-pr:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     needs: generate-pr-description
     name: Validate Release Label and Notes
     runs-on: ubuntu-latest
@@ -55,7 +57,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - uses: jefflinse/pr-semver-bump@v1.7.1
+      - uses: jefflinse/pr-semver-bump@v1.7.2
         name: Validate Pull Request Metadata
         with:
           mode: validate
