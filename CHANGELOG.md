@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.0.2] - 2025-04-18
+### :bug: Bug Fixes
+- [`256cd19`](https://github.com/jfheinrich-eu/pipreqs-action/commit/256cd19187ebf354b3cd194fe86443d034b075bf) - add noop labels *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`19b8f41`](https://github.com/jfheinrich-eu/pipreqs-action/commit/19b8f414e1c9406fe7a29cf1594f3e2202a8e029) - resolve git authentication issue *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.0.1] - 2025-04-13
 ### :bug: Bug Fixes
 - [`ad8acb8`](https://github.com/jfheinrich-eu/pipreqs-action/commit/ad8acb87e2fbf43a13d72d3b8e7eb9c5600bb5c6) - resolve git commit issues *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -20,3 +26,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [v4.0.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v3.0.0...v4.0.0
 [v4.0.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.0...v4.0.1
+[v4.0.2]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.1...v4.0.2
