@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.0.3] - 2025-04-18
+### :bug: Bug Fixes
+- [`e5ab1c4`](https://github.com/jfheinrich-eu/pipreqs-action/commit/e5ab1c48cc499e64b2144280afa027b6dd020b27) - exclude dependabot pull requests *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`0f44021`](https://github.com/jfheinrich-eu/pipreqs-action/commit/0f44021afbfe701d233b79b3e8f669db6060fb6c) - refactor git push origin workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`192af1c`](https://github.com/jfheinrich-eu/pipreqs-action/commit/192af1cf9cdd3007fe248fb01931ec1d345b179c) - fix git push back workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`1073801`](https://github.com/jfheinrich-eu/pipreqs-action/commit/1073801b820bf1fe0ad8684245fe425c2169a91f) - **deps**: bump jefflinse/pr-semver-bump from 1.7.1 to 1.7.2 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+
 ## [v4.0.2] - 2025-04-18
 ### :bug: Bug Fixes
 - [`256cd19`](https://github.com/jfheinrich-eu/pipreqs-action/commit/256cd19187ebf354b3cd194fe86443d034b075bf) - add noop labels *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -27,3 +37,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.0.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v3.0.0...v4.0.0
 [v4.0.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.0...v4.0.1
 [v4.0.2]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.1...v4.0.2
+[v4.0.3]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.2...v4.0.3
