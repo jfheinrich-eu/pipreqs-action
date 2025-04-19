@@ -2,3 +2,5 @@ pipreqs==0.4.13
 pytest==7.4.3
 requests==2.31.0
 pandas==2.2.1
+auto8==0.1.2
+flake8>=3.9.2

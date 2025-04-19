@@ -1,4 +1,3 @@
-import os
 import pytest
 from main import get_python_files, generate_requirements, save_requirements, main
 
@@ -19,7 +18,7 @@ def test_function():
     return response.json()
 """
     main_file.write_text(main_content)
-    
+
     # Create a subdirectory with another Python file
     subdir = tmp_path / "subdir"
     subdir.mkdir()
@@ -34,11 +33,11 @@ def process_data():
     return df.to_json()
 """
     sub_file.write_text(sub_content)
-    
+
     # Debug: Print file contents
     print(f"\nMain file contents:\n{main_file.read_text()}")
     print(f"\nHelper file contents:\n{sub_file.read_text()}")
-    
+
     return tmp_path
 
 
@@ -61,13 +60,13 @@ def test_save_requirements(tmp_path):
     """Test saving requirements to a file."""
     req_file = tmp_path / "requirements.txt"
     requirements = ["requests==2.28.1\n", "json==1.0.0\n", "requests==2.28.1\n"]
-    
+
     save_requirements(str(req_file), requirements)
-    
+
     assert req_file.exists()
     with open(req_file) as f:
         saved_reqs = f.readlines()
-    
+
     # Check that duplicates are removed
     assert len(saved_reqs) == 2
     assert "requests==2.28.1\n" in saved_reqs
@@ -78,10 +77,10 @@ def test_generate_requirements(temp_dir, tmp_path):
     """Test generating requirements for a Python file."""
     req_file = tmp_path / "requirements.txt"
     requirements = generate_requirements(str(req_file), str(temp_dir / "main.py"))
-    
+
     # Debug: Print generated requirements
     print(f"\nGenerated requirements:\n{requirements}")
-    
+
     # Check that external package requirements are found
     assert any("requests" in req.lower() for req in requirements)
     # Note: json is part of the standard library, so it won't be in requirements
@@ -91,12 +90,12 @@ def test_main_function(temp_dir, tmp_path):
     """Test the main function with a complete workflow."""
     req_file = tmp_path / "requirements.txt"
     requirements = main(str(req_file), str(temp_dir), recursive=True)
-    
+
     # Debug: Print generated requirements
     print(f"\nGenerated requirements (main):\n{requirements}")
-    
+
     assert req_file.exists()
     assert len(requirements) > 0
     # Check that requirements from both files are included
     assert any("requests" in req.lower() for req in requirements)
-    assert any("pandas" in req.lower() for req in requirements) 
+    assert any("pandas" in req.lower() for req in requirements)

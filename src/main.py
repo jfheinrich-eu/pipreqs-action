@@ -1,23 +1,23 @@
 import os
 import sys
-from typing import List, Optional
+from typing import List
 from pipreqs import pipreqs
 
 
 def get_python_files(project_path: str, recursive: bool) -> List[str]:
     """
     Get all Python files in the project directory.
-    
+
     Args:
         project_path: Path to the project directory
         recursive: Whether to search recursively in subdirectories
-        
+
     Returns:
         List of paths to Python files
     """
     if not recursive:
         return [project_path]
-        
+
     python_files = []
     for root, _, files in os.walk(project_path):
         for file in files:
@@ -29,16 +29,19 @@ def get_python_files(project_path: str, recursive: bool) -> List[str]:
 def generate_requirements(file_path: str, project_path: str) -> List[str]:
     """
     Generate requirements for a single Python file using pipreqs.
-    
+
     Args:
         file_path: Path to save requirements
         project_path: Path to the Python file or directory
-        
+
     Returns:
         List of requirements
     """
     # Use pipreqs programmatically with all required parameters
-    project_dir = os.path.dirname(project_path) if os.path.isfile(project_path) else project_path
+    project_dir = (
+        os.path.dirname(project_path) if os.path.isfile(project_path) else
+        project_path
+    )
     args = {
         '<path>': project_dir,
         '--savepath': file_path,
@@ -56,7 +59,7 @@ def generate_requirements(file_path: str, project_path: str) -> List[str]:
         '--clean': None
     }
     pipreqs.init(args)
-    
+
     try:
         with open(file_path, 'r') as f:
             return f.readlines()
@@ -67,7 +70,7 @@ def generate_requirements(file_path: str, project_path: str) -> List[str]:
 def save_requirements(file_path: str, requirements: List[str]) -> None:
     """
     Save unique requirements to a file.
-    
+
     Args:
         file_path: Path to save requirements
         requirements: List of requirements to save
@@ -80,22 +83,22 @@ def save_requirements(file_path: str, requirements: List[str]) -> None:
 def main(requirement_path: str, project_path: str, recursive: bool) -> List[str]:
     """
     Main function to generate and save project requirements.
-    
+
     Args:
         requirement_path: Path to save requirements.txt
         project_path: Path to the project directory
         recursive: Whether to search recursively in subdirectories
-        
+
     Returns:
         List of generated requirements
     """
     python_files = get_python_files(project_path, recursive)
     all_requirements = []
-    
+
     for file_path in python_files:
         requirements = generate_requirements(requirement_path, file_path)
         all_requirements.extend(requirements)
-    
+
     save_requirements(requirement_path, all_requirements)
     return all_requirements
 
@@ -104,10 +107,10 @@ if __name__ == '__main__':
     if len(sys.argv) != 4:
         print("Usage: python main.py <requirement_path> <project_path> <recursive>")
         sys.exit(1)
-        
+
     requirement_path = sys.argv[1]
     project_path = sys.argv[2]
     recursive = sys.argv[3].lower() == 'true'
-    
+
     requirements = main(requirement_path, project_path, recursive)
     print(requirements)
