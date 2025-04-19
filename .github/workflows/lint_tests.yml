@@ -23,5 +23,5 @@ jobs:
 
       - name: Tests
         run: |
-          pip install pytest
+          pip install pytest pipreqs
           cd src && pytest test_main.py -v
