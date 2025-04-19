@@ -15,6 +15,9 @@ This action will automatically create the requirements.txt file for a python pro
 
 You can specify the location of your project folder that contains all the python files within your repository.
 You can specify the path to which your requirement.txt has to be saved.
+You can specify should the requirements collect recursively or not.
+
+This action works good with the action `stefanzweifel/git-auto-commit-action` together, to commit the changes back to th branch
 
 ## Usage <a name = "usage"></a>
 
@@ -35,7 +38,13 @@ jobs:
         with:
           PROJECT_PATH: project_folder   #default is the root of the repository
           REQUIREMENT_PATH: project_folder/requirements.txt  #default is requirement.txt in the root of your repository
-          REPOSITORY: jfheinrich-eu/pipreq-action
+          RECURSIVE: 'true'
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.ref_name }}
+          commit_message: 'Updated requirements file on ${{ github.ref_name }} [skip-ci]'
+          file_pattern: requirements.txt
 ```
 
 ### Inputs
@@ -43,10 +52,8 @@ jobs:
 | Input              | Description                                                                                                     |Default          |
 |--------------------|-----------------------------------------------------------------------------------------------------------------|-----------------|
 | `PROJECT_PATH`     | Gives the path to the project folder that contains the python files                                             |  .              |
-| `REPOSITORY`       | Repository in which is to be written back.Example: Jfheinrich-EU/Pipreqs action                                 |                 |
-| `TOKEN`            | Token to write in the repository                                                                                | $GITHUB_TOKEN   |
 | `REQUIREMENT_PATH` | Gives the path to the location where requirements.txt has to be saved, including the requirements.txt file name | requirements.txt|
-| `PROJECT_NAME`     | Includes the project name in the commit                                                                         |                 |
+| `RECURSIVE`        | Collect the requirements recursively                                                                            | true            |
 
 
 ## Authors

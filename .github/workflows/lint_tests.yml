@@ -1,0 +1,25 @@
+name: Lint
+permissions:
+  contents: read
+  pull-requests: write
+
+on: [push]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5.5.0
+        with:
+          python-version: "3.9"
+
+      - uses: actions/checkout@v4
+      - name: Lint
+        run: |
+          pip install flake8
+          flake8 main.py
+
+      - name: Tests
+        run: pytest test_main.py -v
