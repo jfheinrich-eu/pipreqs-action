@@ -1,11 +1,24 @@
 FROM python:3.13.3-alpine3.21
+ADD . /app
 
-COPY LICENSE README.md entrypoint.sh /
+# Copy requirements file if it exists
+COPY ./src /app
 
-RUN apk add --no-cache git
+WORKDIR /app
+
+# Install development dependencies
 RUN apk add --no-cache python3 py3-pip
-RUN pip3 install pipreqs
 
-RUN chmod +x /entrypoint.sh
+# Install pipreqs
+RUN pip3 install --user --target /app pipreqs
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Install project dependencies
+RUN if [ -f /app/requirements.txt ]; then pip3 install --user --target /app -r /app/requirements.txt; fi
+
+# A distroless container image with Python and some basics like SSL certificates
+# https://github.com/GoogleContainerTools/distroless
+FROM gcr.io/distroless/python3-debian10
+COPY --from=builder /app /app
+WORKDIR /app
+ENV PYTHONPATH=/app
+CMD ["/app/main.py"]
