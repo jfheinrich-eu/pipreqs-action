@@ -22,4 +22,6 @@ jobs:
           cd src && flake8 main.py
 
       - name: Tests
-        run: cd src && pytest test_main.py -v
+        run: |
+          pip install pytest
+          cd src && pytest test_main.py -v
