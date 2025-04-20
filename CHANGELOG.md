@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.1.0] - 2025-04-20
+### :sparkles: New Features
+- [`b3ed5d6`](https://github.com/jfheinrich-eu/pipreqs-action/commit/b3ed5d68a20956258dadc8bd3f5264f06ec91e4d) - add python script to collect the reqs recursively *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :bug: Bug Fixes
+- [`e80f5c4`](https://github.com/jfheinrich-eu/pipreqs-action/commit/e80f5c4e477de05c6ab30c40893f8a3739427ccf) - resolve flake8 issues *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`c2a57a3`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c2a57a3be76b7c95814a0ac3d46df52e992e7365) - add missing pytest *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`8a97fc0`](https://github.com/jfheinrich-eu/pipreqs-action/commit/8a97fc0b4b1b53a736437d888639e4c0f350494c) - add missing pipreqs *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :recycle: Refactors
+- [`79956d5`](https://github.com/jfheinrich-eu/pipreqs-action/commit/79956d55a52b8ebe7608bf857e2a69347a846578) - full refactor of requirements.txt creation *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`395c5eb`](https://github.com/jfheinrich-eu/pipreqs-action/commit/395c5ebfde58d064140487de16d4c6a5d0633ee0) - remove backup copies *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`6686017`](https://github.com/jfheinrich-eu/pipreqs-action/commit/66860179dba8bd81e1ccee15e855053daa690035) - remove misplaced requirements.txt *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.0.3] - 2025-04-18
 ### :bug: Bug Fixes
 - [`e5ab1c4`](https://github.com/jfheinrich-eu/pipreqs-action/commit/e5ab1c48cc499e64b2144280afa027b6dd020b27) - exclude dependabot pull requests *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -38,3 +55,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.0.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.0...v4.0.1
 [v4.0.2]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.1...v4.0.2
 [v4.0.3]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.2...v4.0.3
+[v4.1.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.3...v4.1.0
