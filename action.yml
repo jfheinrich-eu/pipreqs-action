@@ -6,12 +6,12 @@ inputs:
   PROJECT_PATH:
     description: "Gives the path of the project"
     required: true
-    default: "."
+    default: "/github/workspace"
 
   REQUIREMENT_PATH:
     description: "Folder where requirements.txt has to be saved in"
     required: true
-    default: "requirements.txt"
+    default: "/github/workspace/requirements.txt"
 
   RECURSIVE:
     description: "Collect the requirements recursively, ['true'|'false']; default: 'true'"

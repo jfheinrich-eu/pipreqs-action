@@ -33,11 +33,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Automatic requirements.txt for Python Project
         uses: jfheinrich-eu/pipreqs-action@master
-
-        # Put an example of mandatory inputs here
         with:
-          PROJECT_PATH: project_folder   #default is the root of the repository
-          REQUIREMENT_PATH: project_folder/requirements.txt  #default is requirement.txt in the root of your repository
+          PROJECT_PATH: project_folder
+          REQUIREMENT_PATH: project_folder/requirements.txt
           RECURSIVE: 'true'
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -49,11 +47,11 @@ jobs:
 
 ### Inputs
 
-| Input              | Description                                                                                                     |Default          |
-|--------------------|-----------------------------------------------------------------------------------------------------------------|-----------------|
-| `PROJECT_PATH`     | Gives the path to the project folder that contains the python files                                             |  .              |
-| `REQUIREMENT_PATH` | Gives the path to the location where requirements.txt has to be saved, including the requirements.txt file name | requirements.txt|
-| `RECURSIVE`        | Collect the requirements recursively                                                                            | true            |
+| Input              | Description                                                                                                     |Default                             |
+|--------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------|
+| `PROJECT_PATH`     | Gives the path to the project folder that contains the python files                                             | /github/workspace                  |
+| `REQUIREMENT_PATH` | Gives the path to the location where requirements.txt has to be saved, including the requirements.txt file name | /github/workspace/requirements.txt |
+| `RECURSIVE`        | Collect the requirements recursively                                                                            | true                               |
 
 
 ## Authors

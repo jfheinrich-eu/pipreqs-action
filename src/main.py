@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 from typing import List
@@ -103,14 +105,29 @@ def main(requirement_path: str, project_path: str, recursive: bool) -> List[str]
     return all_requirements
 
 
+def get_argument(arg_position: int, env_name: str) -> str:
+    """
+      Helper function to get the program arguments from the commandline or the environment
+
+      Args:
+          arg_position: Index in sys.argv
+          env_name: Name of the environment variable
+    """
+    if len(sys.argv) > arg_position:
+        return sys.argv[arg_position]
+
+    return os.getenv(env_name)
+
+
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
+    requirement_path: str = get_argument(1, "INPUT_REQUIREMENT_PATH")
+    project_path: str = get_argument(2, "INPUT_PROJECT_PATH")
+    recursive: str = get_argument(3, "INPUT_RECURSIVE")
+
+    if requirement_path is None or project_path is None or recursive is None:
         print("Usage: python main.py <requirement_path> <project_path> <recursive>")
         sys.exit(1)
 
-    requirement_path = sys.argv[1]
-    project_path = sys.argv[2]
-    recursive = sys.argv[3].lower() == 'true'
-
-    requirements = main(requirement_path, project_path, recursive)
+    requirements: List[str] = main(requirement_path, project_path,
+                                   recursive.lower() == 'true')
     print(requirements)
