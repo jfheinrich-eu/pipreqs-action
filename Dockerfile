@@ -1,11 +1,16 @@
-FROM python:3.13.3-alpine3.21
+FROM python:3.13.3-alpine3.21 AS builder
 
-COPY LICENSE README.md entrypoint.sh /
+ADD ./src /app
+RUN rm -rf /app/__pycache__ && \
+    rm -rf /app/.pytest_cache && \
+    pip3 install --target /app pipreqs && \
+    chmod 755 /app/main.py
 
-RUN apk add --no-cache git
-RUN apk add --no-cache python3 py3-pip
-RUN pip3 install pipreqs
+# Install project dependencies
+RUN if [ -f /app/requirements.txt ]; then pip3 install --target /app -r /app/requirements.txt; fi
 
-RUN chmod +x /entrypoint.sh
+FROM python:3.13.3-alpine3.21 AS final
+COPY --from=builder /app /app
+ENV PYTHONPATH=/app
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/main.py"]

@@ -6,26 +6,17 @@ inputs:
   PROJECT_PATH:
     description: "Gives the path of the project"
     required: true
-    default: "."
+    default: "/github/workspace"
 
   REQUIREMENT_PATH:
     description: "Folder where requirements.txt has to be saved in"
     required: true
-    default: "requirements.txt"
+    default: "/github/workspace/requirements.txt"
 
-  TOKEN:
-    description: "GitHub token to write back to the repository"
+  RECURSIVE:
+    description: "Collect the requirements recursively, ['true'|'false']; default: 'true'"
     required: true
-    default: $GITHUB_TOKEN
-
-  REPOSITORY:
-    description: "The repository to use: [organization|user]/[project]"
-    required: true
-
-  PROJECT_NAME:
-    description: "Name of the project to include in the commit"
-    required: true
-    default: ""
+    default: "true"
 
 runs:
   using: "docker"
