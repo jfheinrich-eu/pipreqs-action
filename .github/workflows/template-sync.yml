@@ -1,10 +1,13 @@
 name: Template Sync
 on:
     push
+permissions:
+    contents: write
+    pull-requests: write
 
 jobs:
     template-sync:
-        runs-on: ubuntu-latests
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
