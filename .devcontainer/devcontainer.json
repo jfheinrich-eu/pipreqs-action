@@ -10,14 +10,38 @@
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/joshuanianji/devcontainer-features/github-cli-persistence:1": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/devcontainers-extra/features/node-asdf:0": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "pip3 install --user -r src/requirements.txt",
 	// Configure tool-specific properties.
-	"customizations": {}
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.autopep8",
+				"ms-azuretools.vscode-docker",
+				"docker.docker",
+				"dbaeumer.vscode-eslint",
+				"MS-CEINTL.vscode-language-pack-de",
+				"github.vscode-github-actions",
+				"me-dutour-mathieu.vscode-github-actions",
+				"SanjulaGanepola.github-local-actions",
+				"GitHub.vscode-pull-request-github",
+				"codezombiech.gitignore",
+				"ms-python.vscode-pylance",
+				"ms-python.python",
+				"ms-python.debugpy",
+				"redhat.vscode-yaml"
+			]
+		}
+	},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
+	"mounts": [
+		"source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.ssh-container,target=/home/vscode/.ssh,type=bind,consistency=cached"
+	]
 }
