@@ -1,5 +1,10 @@
 {
   "dependencies": {
     "@template-tools/sync-cli": "^3.5.40"
+  },
+  "template": {
+    "inheritFrom": [
+      "jfheinrich-eu/template-github-action"
+    ]
   }
 }
