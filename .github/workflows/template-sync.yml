@@ -1,0 +1,19 @@
+name: Template Sync
+on:
+    push
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    template-sync:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Template Sync
+              id: template-sync
+              uses: template-tools/template-sync-action@v1.0.0
+              with:
+                template: "jfheinrich-eu/template-github-action"

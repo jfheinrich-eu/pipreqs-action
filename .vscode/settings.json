@@ -1,5 +1,8 @@
 {
     "git.enableCommitSigning": true,
     "jira-plugin.workingProject": "",
-    "scm.alwaysShowRepositories": false
+    "scm.alwaysShowRepositories": false,
+    "dev.containers.defaultExtensions": [
+        "mutantdino.resourcemonitor"
+    ]
 }
