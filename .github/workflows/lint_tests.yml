@@ -19,9 +19,9 @@ jobs:
       - name: Lint
         run: |
           pip install flake8
-          cd src && flake8 main.py
+          cd src && flake8
 
       - name: Tests
         run: |
-          pip install pytest pipreqs
-          cd src && pytest test_main.py -v
+          pip install pytest pytest-cov pipreqs
+          pytest --cov=github_action.main

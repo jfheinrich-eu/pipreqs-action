@@ -1,0 +1,18 @@
+[tool.pytest.ini_options]
+pythonpath = "src"
+testpaths = [
+    "tests"
+]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[build-system]
+requires = [
+    "setuptools"
+]
+build-backend = "setuptools.buid_meta"
+
+[project]
+name = "pipreqs-action"
+dynamic = ["version"]
