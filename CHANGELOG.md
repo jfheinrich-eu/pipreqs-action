@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.1.1] - 2025-04-25
+### :sparkles: New Features
+- [`1a71c3e`](https://github.com/jfheinrich-eu/pipreqs-action/commit/1a71c3e0d896c4c058ab4bcc2e514707d5448f8d) - add template sync *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :bug: Bug Fixes
+- [`ecc80f0`](https://github.com/jfheinrich-eu/pipreqs-action/commit/ecc80f063744508c6c91c03be1b519d0d3c1a673) - resolve image name issues *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`c45d500`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c45d50046a9229094f5ded0c54cd31384994deaa) - **deps**: bump pytest from 7.4.3 to 8.3.5 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`c0124a8`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c0124a8b7996b5d123258c885196fb7c0a3a9a75) - **deps**: bump pipreqs from 0.4.13 to 0.5.0 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+
 ## [v4.1.0] - 2025-04-20
 ### :sparkles: New Features
 - [`b3ed5d6`](https://github.com/jfheinrich-eu/pipreqs-action/commit/b3ed5d68a20956258dadc8bd3f5264f06ec91e4d) - add python script to collect the reqs recursively *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -56,3 +68,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.0.2]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.1...v4.0.2
 [v4.0.3]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.2...v4.0.3
 [v4.1.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.3...v4.1.0
+[v4.1.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.1.0...v4.1.1
