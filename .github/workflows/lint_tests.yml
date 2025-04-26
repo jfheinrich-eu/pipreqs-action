@@ -10,19 +10,28 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v5.6.0
         with:
           python-version: "3.9"
 
-      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-cov
+          pip install -r src/requirements.txt
+
       - name: Lint
         run: |
           pip install flake8
           cd src && flake8
 
-      - name: Tests
-        run: |
-          pip install -r src/requirements.txt
-          pip install pytest pytest-cov
-          pytest --cov=github_action.main
+      - name: Run tests
+        run: pytest --cov --cov-branch --cov-report=xml
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: jfheinrich-eu/pipreqs-action
