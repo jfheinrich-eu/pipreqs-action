@@ -23,5 +23,9 @@ class Helper:
 
         repo = Repo(gitbase)
         tags = repo.tags
-        tagref = tags[-1]
-        return tagref
+        if len(tags) > 0:
+            tags.revers()
+            tagref = tags[0]
+            return tagref
+        else:
+            return repo.active_branch
