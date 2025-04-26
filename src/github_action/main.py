@@ -118,15 +118,19 @@ class PipReqsAction:
         return all_requirements
 
     @staticmethod
-    def get_argument(self,  arg_position: int, env_name: str) -> str:
+    def get_argument(arg_position: int, env_name: str = None) -> str:
         """
         Helper function to get the program arguments from the commandline or the environment
 
         Args:
             arg_position: Index in sys.argv
-            env_name: Name of the environment variable
+            env_name: Name of the environment variable, optional
         """
+        print(arg_position)
         if len(sys.argv) > arg_position:
             return sys.argv[arg_position]
 
-        return os.getenv(env_name)
+        if env_name is None:
+            return None
+        else:
+            return os.getenv(env_name)

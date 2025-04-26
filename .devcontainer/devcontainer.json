@@ -35,7 +35,8 @@
 				"ms-python.vscode-pylance",
 				"ms-python.python",
 				"ms-python.debugpy",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"adam-bender.commit-message-editor"
 			]
 		}
 	},

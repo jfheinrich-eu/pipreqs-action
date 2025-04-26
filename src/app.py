@@ -19,6 +19,8 @@ if __name__ == '__main__':
         print("Usage: python main.py <requirement_path> <project_path> <recursive>")
         sys.exit(1)
 
-    requirements: List[str] = PipReqsAction.run(requirement_path, project_path,
-                                                recursive.lower() == 'true')
+    pipReqsAction = PipReqsAction(requirement_path, project_path,
+                                  recursive.lower() == 'true')
+
+    requirements: List[str] = pipReqsAction.run()
     print(requirements)

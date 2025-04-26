@@ -23,5 +23,6 @@ jobs:
 
       - name: Tests
         run: |
-          pip install pytest pytest-cov pipreqs
+          pip install -r src/requirements.txt
+          pip install pytest pytest-cov
           pytest --cov=github_action.main
