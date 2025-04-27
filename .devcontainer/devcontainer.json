@@ -16,7 +16,8 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip3 install --user -r src/requirements.txt",
+	"postCreateCommand": "",
+	"postAttachCommand": ".devcontainer/postAttachCommands.sh",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -34,7 +35,10 @@
 				"ms-python.vscode-pylance",
 				"ms-python.python",
 				"ms-python.debugpy",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"adam-bender.commit-message-editor",
+				"ryanluker.vscode-coverage-gutters",
+				"edonet.vscode-command-runner"
 			]
 		}
 	},

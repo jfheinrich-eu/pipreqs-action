@@ -13,4 +13,4 @@ FROM python:3.13.3-alpine3.21 AS final
 COPY --from=builder /app /app
 ENV PYTHONPATH=/app
 
-ENTRYPOINT ["/app/main.py"]
+ENTRYPOINT ["/app/app.py"]

@@ -4,5 +4,19 @@
     "scm.alwaysShowRepositories": false,
     "dev.containers.defaultExtensions": [
         "mutantdino.resourcemonitor"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/src"
+    ],
+    "command-runner.terminal.name": "Run Command",
+    "command-runner.terminal.autoClear": true,
+    "command-runner.terminal.autoFocus": true,
+    "command-runner.commands": {
+        "run pytest testsuite": "cd ${workspaceFolder} && pytest --cov --cov-branch --cov-report term --cov-report xml:coverage/cov.xml --cov-report html:coverage/cov_html"
+    }
 }
