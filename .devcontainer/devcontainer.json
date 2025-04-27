@@ -36,7 +36,9 @@
 				"ms-python.python",
 				"ms-python.debugpy",
 				"redhat.vscode-yaml",
-				"adam-bender.commit-message-editor"
+				"adam-bender.commit-message-editor",
+				"ryanluker.vscode-coverage-gutters",
+				"edonet.vscode-command-runner"
 			]
 		}
 	},
