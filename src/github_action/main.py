@@ -79,8 +79,8 @@ class PipReqsAction:
         try:
             with open(file_path, 'r') as f:
                 return f.readlines()
-        except FileNotFoundError:
-            return []
+        except FileNotFoundError as e:  # pragma: no cover
+            raise FileNotFoundError(f"pipreqs throws exception: {e}")
 
     @classmethod
     def save_requirements(self, file_path: str, requirements: List[str]) -> None:
@@ -118,19 +118,18 @@ class PipReqsAction:
         return all_requirements
 
     @staticmethod
-    def get_argument(arg_position: int, env_name: str = None) -> str:
+    def get_argument(arg_position: int, env_name: str = None, args: list[str] = None) -> str:
         """
         Helper function to get the program arguments from the commandline or the environment
 
         Args:
             arg_position: Index in sys.argv
             env_name: Name of the environment variable, optional
+            args: List of arguments, if None then use sys.argv
         """
-        print(arg_position)
-        if len(sys.argv) > arg_position:
-            return sys.argv[arg_position]
+        ArgumentList = sys.argv if args is None else args
 
-        if env_name is None:
-            return None
-        else:
-            return os.getenv(env_name)
+        if len(ArgumentList) > arg_position:
+            return ArgumentList[arg_position]
+
+        return None if env_name is None else os.getenv(env_name)

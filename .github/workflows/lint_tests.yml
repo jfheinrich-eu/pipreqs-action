@@ -28,10 +28,21 @@ jobs:
           cd src && flake8
 
       - name: Run tests
-        run: pytest --cov --cov-branch --cov-report=xml
+        run: pytest --cov --cov-branch --cov-report xml:coverage/cov.xml
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: jfheinrich-eu/pipreqs-action
+          files: coverage/cov.xml
+          verbose: true
+
+      - name: Generate Code Coverage report
+        id: code-coverage
+        uses: barecheck/code-coverage-action@v1
+        with:
+          barecheck-github-app-token: ${{ secrets.BARECHECK_GITHUB_APP_TOKEN }}
+          lcov-file: "coverage/cov.xml"
+          send-summary-comment: true
+          show-annotations: ''

@@ -10,7 +10,7 @@ import os
 from git import Repo
 
 
-class Helper:
+class Helper:  # pragma no cover
     """Class for helper method"""
 
     @staticmethod
@@ -24,7 +24,7 @@ class Helper:
         repo = Repo(gitbase)
         tags = repo.tags
         if len(tags) > 0:
-            tags.revers()
+            tags.reverse()
             tagref = tags[0]
             return tagref
         else:

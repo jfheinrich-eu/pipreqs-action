@@ -1,4 +1,5 @@
 import pytest
+import os
 from github_action.main import PipReqsAction
 
 
@@ -33,6 +34,12 @@ def process_data():
     return df.to_json()
 """
     sub_file.write_text(sub_content)
+
+    sub_file2 = subdir / "helper.txt"
+    sub2_content = """
+This file shoud ignored bei PipReqsActon
+"""
+    sub_file2.write_text(sub2_content)
 
     # Debug: Print file contents
     print(f"\nMain file contents:\n{main_file.read_text()}")
@@ -86,6 +93,24 @@ def test_generate_requirements(temp_dir, tmp_path):
     # Check that external package requirements are found
     assert any("requests" in req.lower() for req in requirements)
     # Note: json is part of the standard library, so it won't be in requirements
+
+
+def test_get_argument():
+    """Test get a commandline argument"""
+    argv: list[str] = ['program name', './src/requirements.txt']
+    value = PipReqsAction.get_argument(1, None, argv)
+    assert value is not None
+    assert value == './src/requirements.txt'
+
+
+def test_get_argument_environment():
+    """Test get a commandline argument"""
+    argv: list[str] = ['program name', './src/requirements.txt']
+    os.environ['INPUT_PYTEST_DATE'] = '2025-04-26'
+
+    value = PipReqsAction.get_argument(2, 'INPUT_PYTEST_DATE', argv)
+    assert value is not None
+    assert value == '2025-04-26'
 
 
 def test_main_function(temp_dir, tmp_path):
