@@ -7,6 +7,7 @@
 (cd src && pip3 install --user pipreqs pytest pytest-cov flake8 auto8)
 (cd src && pip3 install --user -r requirements.txt)
 (python3 -m pip install --user pre-commit && pre-commit --version)
+(python3 -m pip install --user setuptools-scm)
 
 # missing dependencis for pre-commit configuration black, isort, pyupgrade
 (python3 -m pip install --user black isort pyupgrade)
