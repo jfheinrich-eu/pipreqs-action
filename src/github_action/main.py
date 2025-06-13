@@ -2,7 +2,7 @@
 
 import os
 import sys
-from typing import List
+# from typing import List
 
 from pipreqs import pipreqs
 
@@ -93,7 +93,8 @@ class PipReqsAction:
             file_path: Path to save requirements
             requirements: List of requirements to save
         """
-        unique_requirements = list({req for req in requirements if req.strip()})
+        unique_requirements = list(
+            {req for req in requirements if req.strip()})
         with open(file_path, "w") as f:
             f.writelines(unique_requirements)
 
@@ -109,7 +110,8 @@ class PipReqsAction:
         all_requirements = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(self.requirement_path, file_path)
+            requirements = self.generate_requirements(
+                self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
         self.save_requirements(self.requirement_path, all_requirements)
