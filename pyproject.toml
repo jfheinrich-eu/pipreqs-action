@@ -9,10 +9,35 @@ addopts = [
 
 [build-system]
 requires = [
-    "setuptools"
+    "setuptools",
+    "wheel",
+    "setuptools-scm"
 ]
-build-backend = "setuptools.buid_meta"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "pipreqs-action"
+description = "Automatisierte Erstellung von requirements.txt für Python-Projekte mit GitHub Actions."
+authors = [
+    { name = "Joerg Heinrich", email = "joerg@jfheinrich.eu" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
 dynamic = ["version"]
+dependencies = [
+    "pipreqs"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "flake8",
+    "black",
+    "isort",
+    "pyupgrade"
+]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
