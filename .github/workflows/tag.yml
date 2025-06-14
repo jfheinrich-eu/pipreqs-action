@@ -37,7 +37,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - uses: jefflinse/pr-semver-bump@v1.7.2
+      - uses: jefflinse/pr-semver-bump@v1.7.3
         name: Bump and Tag Version
         with:
           mode: bump
