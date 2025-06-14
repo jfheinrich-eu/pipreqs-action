@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.2.3] - 2025-06-14
+### :bug: Bug Fixes
+- [`338b803`](https://github.com/jfheinrich-eu/pipreqs-action/commit/338b8034fd83a7083893f09a389c69644b158f7c) - specify exact versions for pipreqs and GitPython in dependencies *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.2.1] - 2025-04-27
 ### :bug: Bug Fixes
 - [`d48f035`](https://github.com/jfheinrich-eu/pipreqs-action/commit/d48f03507491ff96555256c4dd33195a7f807762) - resolve workflow permission issues *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -75,3 +80,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.1.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.0.3...v4.1.0
 [v4.1.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.1.0...v4.1.1
 [v4.2.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.0...v4.2.1
+[v4.2.3]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.2...v4.2.3
