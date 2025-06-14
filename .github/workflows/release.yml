@@ -18,13 +18,44 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for accurate changelog generation
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install build setuptools-scm pytest pytest-cov
+          pip install .[dev]
+
+      - name: Build package
+        run: |
+          python -m build --wheel --sdist
+
+      - name: Run tests
+        run: pytest --cov --cov-branch
+
+      - name: Show version
+        run: |
+          python -c "import setuptools_scm; print(setuptools_scm.get_version())"
 
       - name: Update CHANGELOG
         id: changelog
         uses: requarks/changelog-action@v1
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
+
+      - name: Commit CHANGELOG.md
+        continue-on-error: true
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: master
+          commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
+          file_pattern: CHANGELOG.md
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -35,9 +66,9 @@ jobs:
           release_name: 'Release ${{ github.ref_name }}'
           body: ${{ steps.changelog.outputs.changes }}
 
-      - name: Commit CHANGELOG.md
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
         with:
-          branch: master
-          commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
-          file_pattern: CHANGELOG.md
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

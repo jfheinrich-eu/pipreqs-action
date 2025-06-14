@@ -19,13 +19,17 @@ build-backend = "setuptools.build_meta"
 name = "pipreqs-action"
 description = "Automatisierte Erstellung von requirements.txt für Python-Projekte mit GitHub Actions."
 authors = [
-    { name = "Dein Name", email = "deine.email@example.com" }
+    { name = "Joerg Heinrich", email = "joerg@jfheinrich.eu" }
 ]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dynamic = ["version"]
 dependencies = [
-    "pipreqs",
+    "pipreqs"
+]
+
+[project.optional-dependencies]
+dev = [
     "pytest",
     "pytest-cov",
     "flake8",
