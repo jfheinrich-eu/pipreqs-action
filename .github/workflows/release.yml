@@ -51,7 +51,7 @@ jobs:
 
       - name: Commit CHANGELOG.md
         continue-on-error: true
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: master
           commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
