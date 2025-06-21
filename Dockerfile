@@ -1,4 +1,4 @@
-FROM python:3.12.11-alpine3.21 AS builder
+FROM python:3.13.5-alpine3.21 AS builder
 
 RUN apk add --update git
 
@@ -11,7 +11,7 @@ RUN rm -rf /app/__pycache__ && \
 # Install project dependencies
 RUN if [ -f /app/requirements.txt ]; then pip3 install --target /app -r /app/requirements.txt; fi
 
-FROM python:3.12.11-alpine3.21 AS final
+FROM python:3.13.5-alpine3.21 AS final
 COPY --from=builder /app /app
 ENV PYTHONPATH=/app
 
