@@ -21,3 +21,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "python:*"
+        versions: [">=3.13.*"]

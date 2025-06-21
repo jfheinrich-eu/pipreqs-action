@@ -10,7 +10,7 @@
 # missing dependencis for pre-commit configuration black, isort, pyupgrade
 (python3 -m pip install --user black isort pyupgrade)
 (python3 -m pip install --user setuptools-scm)
-(cd src && pip3 install --user .[dev])
+(python3 -m pip install --user .[dev])
 
 
 npm ci
