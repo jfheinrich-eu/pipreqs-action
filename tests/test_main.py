@@ -1,5 +1,7 @@
-import pytest
 import os
+
+import pytest
+
 from github_action.main import PipReqsAction
 
 
@@ -66,8 +68,7 @@ def test_get_python_files_recursive(temp_dir):
 def test_save_requirements(tmp_path):
     """Test saving requirements to a file."""
     req_file = tmp_path / "requirements.txt"
-    requirements = ["requests==2.28.1\n",
-                    "json==1.0.0\n", "requests==2.28.1\n"]
+    requirements = ["requests==2.28.1\n", "json==1.0.0\n", "requests==2.28.1\n"]
 
     PipReqsAction.save_requirements(str(req_file), requirements)
 
@@ -85,7 +86,8 @@ def test_generate_requirements(temp_dir, tmp_path):
     """Test generating requirements for a Python file."""
     req_file = tmp_path / "requirements.txt"
     requirements = PipReqsAction.generate_requirements(
-        str(req_file), str(temp_dir / "main.py"))
+        str(req_file), str(temp_dir / "main.py")
+    )
 
     # Debug: Print generated requirements
     print(f"\nGenerated requirements:\n{requirements}")
@@ -97,20 +99,20 @@ def test_generate_requirements(temp_dir, tmp_path):
 
 def test_get_argument():
     """Test get a commandline argument"""
-    argv: list[str] = ['program name', './src/requirements.txt']
+    argv: list[str] = ["program name", "./src/requirements.txt"]
     value = PipReqsAction.get_argument(1, None, argv)
     assert value is not None
-    assert value == './src/requirements.txt'
+    assert value == "./src/requirements.txt"
 
 
 def test_get_argument_environment():
     """Test get a commandline argument"""
-    argv: list[str] = ['program name', './src/requirements.txt']
-    os.environ['INPUT_PYTEST_DATE'] = '2025-04-26'
+    argv: list[str] = ["program name", "./src/requirements.txt"]
+    os.environ["INPUT_PYTEST_DATE"] = "2025-04-26"
 
-    value = PipReqsAction.get_argument(2, 'INPUT_PYTEST_DATE', argv)
+    value = PipReqsAction.get_argument(2, "INPUT_PYTEST_DATE", argv)
     assert value is not None
-    assert value == '2025-04-26'
+    assert value == "2025-04-26"
 
 
 def test_main_function(temp_dir, tmp_path):

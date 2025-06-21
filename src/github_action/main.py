@@ -2,8 +2,10 @@
 
 import os
 import sys
-from typing import List
+
 from pipreqs import pipreqs
+
+# from typing import List
 
 
 class PipReqsAction:
@@ -20,7 +22,7 @@ class PipReqsAction:
         self.recursive = recursive
 
     @classmethod
-    def get_python_files(self, project_path: str, recursive: bool) -> List[str]:
+    def get_python_files(self, project_path: str, recursive: bool) -> list[str]:
         """
         Get all Python files in the project directory.
 
@@ -37,12 +39,12 @@ class PipReqsAction:
         python_files = []
         for root, _, files in os.walk(project_path):
             for file in files:
-                if file.endswith('.py') and not file.startswith('.'):
+                if file.endswith(".py") and not file.startswith("."):
                     python_files.append(os.path.join(root, file))
         return python_files
 
     @classmethod
-    def generate_requirements(self, file_path: str, project_path: str) -> List[str]:
+    def generate_requirements(self, file_path: str, project_path: str) -> list[str]:
         """
         Generate requirements for a single Python file using pipreqs.
 
@@ -55,35 +57,36 @@ class PipReqsAction:
         """
         # Use pipreqs programmatically with all required parameters
         project_dir = (
-            os.path.dirname(project_path) if os.path.isfile(project_path) else
-            project_path
+            os.path.dirname(project_path)
+            if os.path.isfile(project_path)
+            else project_path
         )
         args = {
-            '<path>': project_dir,
-            '--savepath': file_path,
-            '--force': True,
-            '--print': False,
-            '--encoding': None,
-            '--ignore': None,
-            '--no-follow-links': False,
-            '--debug': False,
-            '--mode': None,
-            '--pypi-server': None,
-            '--proxy': None,
-            '--use-local': None,
-            '--diff': None,
-            '--clean': None
+            "<path>": project_dir,
+            "--savepath": file_path,
+            "--force": True,
+            "--print": False,
+            "--encoding": None,
+            "--ignore": None,
+            "--no-follow-links": False,
+            "--debug": False,
+            "--mode": None,
+            "--pypi-server": None,
+            "--proxy": None,
+            "--use-local": None,
+            "--diff": None,
+            "--clean": None,
         }
         pipreqs.init(args)
 
         try:
-            with open(file_path, 'r') as f:
+            with open(file_path) as f:
                 return f.readlines()
         except FileNotFoundError as e:  # pragma: no cover
             raise FileNotFoundError(f"pipreqs throws exception: {e}")
 
     @classmethod
-    def save_requirements(self, file_path: str, requirements: List[str]) -> None:
+    def save_requirements(self, file_path: str, requirements: list[str]) -> None:
         """
         Save unique requirements to a file.
 
@@ -91,34 +94,32 @@ class PipReqsAction:
             file_path: Path to save requirements
             requirements: List of requirements to save
         """
-        unique_requirements = list(
-            set(req for req in requirements if req.strip()))
-        with open(file_path, 'w') as f:
+        unique_requirements = list({req for req in requirements if req.strip()})
+        with open(file_path, "w") as f:
             f.writelines(unique_requirements)
 
     @classmethod
-    def run(self) -> List[str]:
+    def run(self) -> list[str]:
         """
         Main function to generate and save project requirements.
 
         Returns:
             List of generated requirements
         """
-        python_files = self.get_python_files(
-            self.project_path, self.recursive)
+        python_files = self.get_python_files(self.project_path, self.recursive)
         all_requirements = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(
-                self.requirement_path, file_path)
+            requirements = self.generate_requirements(self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
-        self.save_requirements(
-            self.requirement_path, all_requirements)
+        self.save_requirements(self.requirement_path, all_requirements)
         return all_requirements
 
     @staticmethod
-    def get_argument(arg_position: int, env_name: str = None, args: list[str] = None) -> str:
+    def get_argument(
+        arg_position: int, env_name: str = None, args: list[str] = None
+    ) -> str:
         """
         Helper function to get the program arguments from the commandline or the environment
 
