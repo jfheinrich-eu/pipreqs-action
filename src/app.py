@@ -15,7 +15,7 @@ if __name__ == '__main__':
     recursive: str = PipReqsAction.get_argument(
         3, "INPUT_RECURSIVE")
 
-    if requirement_path is None or project_path is None or recursive is None:
+    if not requirement_path or not project_path or not recursive:
         print("Usage: python main.py <requirement_path> <project_path> <recursive>")
         sys.exit(1)
 
