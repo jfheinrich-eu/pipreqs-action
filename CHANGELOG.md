@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.2.5] - 2025-06-21
+### :bug: Bug Fixes
+- [`a97372b`](https://github.com/jfheinrich-eu/pipreqs-action/commit/a97372b819682eae6068b903ff51ed5f6819c846) - update Python version in Dockerfile and correct pip install command in postAttachCommands.sh *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.2.4] - 2025-06-21
 ### :bug: Bug Fixes
 - [`c8b292e`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c8b292e0ff1bfbb57be5adaa9bab33545bf96306) - update .gitignore to include coverage directory *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -88,3 +93,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.2.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.0...v4.2.1
 [v4.2.3]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.2...v4.2.3
 [v4.2.4]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.3...v4.2.4
+[v4.2.5]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.4...v4.2.5
