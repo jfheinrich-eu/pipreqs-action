@@ -1,8 +1,7 @@
-"""
-Helper classes
-
+"""Helper module for pipreqs-action.
+This module provides utility classes and functions, such as version retrieval.
 Contains:
-    - Helper
+    - Class Helper
         - Helper::get_version() -> str
 """
 
@@ -10,7 +9,7 @@ import importlib.metadata
 
 
 class Helper:  # pragma no cover
-    """Class for helper method"""
+    """Class for helper methods such as version retrieval."""
 
     @staticmethod
     def get_version() -> str:

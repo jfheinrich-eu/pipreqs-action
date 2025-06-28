@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 
+"""Main module for pipreqs-action.
+
+Contains the PipReqsAction class for generating requirements.txt files.
+"""
+
+
 import os
 import sys
 import typing
 from pipreqs import pipreqs  # type: ignore
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:    # pragma: no cover
     pass
 # from typing import List
 

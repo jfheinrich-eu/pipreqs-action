@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""Entry point for pipreqs-action.
+
+Handles argument parsing and runs the main logic.
+"""
 
 import sys
 
@@ -9,6 +13,7 @@ from github_action.main import PipReqsAction
 
 
 if __name__ == "__main__":
+    """Main entry point for the pipreqs-action script."""
     print(f"Version: {__version__}")
 
     requirement_path: str = PipReqsAction.get_argument(
