@@ -10,6 +10,23 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - uses: jfheinrich-eu/psono-secret-whisperer@v1.0.0
+        id: psono-secrets
+        with:
+          ci_api_key_id: ${{ secrets.PSONO_API_KEY_ID }}
+          ci_api_secret_key_hex: ${{ secrets.PSONO_API_SECRET_KEY_HEX }}
+          ci_server_url: ${{ vars.PSONO_SERVER_URL }}
+          secret_id: ${{ secrets.PSONO_BARECHECK_ENVIRONMENT }}
+          secret_type: 'env'
+          secret_fields: 'BARECHECK_GITHUB_APP_TOKEN,API_KEY_PIPREQS_ACTION'
+          mask_secrets: 'BARECHECK_GITHUB_APP_TOKEN,API_KEY_PIPREQS_ACTION'
+
+      - uses: jwalton/gh-find-current-pr@v1.3.3
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open          
+
       - uses: actions/checkout@v4
 
       - name: Set up Python 3.9
@@ -19,16 +36,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pytest pytest-cov
-          pip install -r src/requirements.txt
+          pip install .
+          pip install .[dev]
 
       - name: Lint
-        run: |
-          pip install flake8
-          cd src && flake8
+        run: python -m flake8 src
 
       - name: Run tests
-        run: pytest --cov --cov-branch --cov-report xml:coverage/cov.xml --cov-report lcov:coverage/cov.info
+        run: pytest
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
@@ -40,9 +55,12 @@ jobs:
 
       - name: Generate Code Coverage report
         id: code-coverage
+        if: success() && steps.findPr.outputs.number
         uses: barecheck/code-coverage-action@v1
         with:
-          barecheck-github-app-token: ${{ secrets.BARECHECK_GITHUB_APP_TOKEN }}
+          barecheck-github-app-token: ${{ steps.psono-secrets.outputs.secret1 }}
+          barecheck-api-key: ${{ steps.psono-secrets.outputs.secret2 }}
           lcov-file: "coverage/cov.info"
+          pull-number: ${{ steps.findPr.outputs.number }}
           send-summary-comment: true
-          show-annotations: ''
+          show-annotations: 'warning'
