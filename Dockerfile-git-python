@@ -1,0 +1,40 @@
+# Stage 1: Build base image
+FROM python:3.12-alpine AS base
+
+ENV GIT_VERSION=2.50.0
+
+RUN <<EOF
+    apk add --update --no-cache git
+
+    apk add --no-cache --virtual .build-deps \
+    build-base \
+    autoconf \
+    linux-headers \
+    perl \
+    perl-dev \
+    openssl-dev \
+    zlib-dev \
+    gettext-dev \
+    curl-dev \
+    expat-dev
+
+    cd /tmp && \
+    wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz && \
+    tar -xzf git-${GIT_VERSION}.tar.gz && \
+    rm git-${GIT_VERSION}.tar.gz && \
+    cd git-${GIT_VERSION}
+
+    mkdir -p /opt/git && \
+    make configure && \
+    ./configure --prefix=/opt/git && \
+    make all && \
+    make install
+EOF
+
+# Stage 2: Final image
+FROM python:3.12-alpine AS final
+COPY --from=base /opt/git /opt/git
+ENV PATH="/opt/git/bin:${PATH}"
+ENV LD_LIBRARY_PATH="/opt/git/lib"
+
+CMD ["python3"]

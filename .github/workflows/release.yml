@@ -16,6 +16,18 @@ jobs:
         shell: bash
 
     steps:
+      - name: Get DockerHub Registry Secrets
+        id: dockerhub-registry-secrets
+        uses: jfheinrich-eu/psono-secret-whisperer@v1.0.0
+        with:
+          ci_api_key_id: ${{ secrets.PSONO_API_KEY_ID }}
+          ci_api_secret_key_hex: ${{ secrets.PSONO_API_SECRET_KEY_HEX }}
+          ci_server_url: ${{ vars.PSONO_SERVER_URL }}
+          secret_id: ${{ secrets.PSONO_DOCKERHUB_REGISTRY_ID }}
+          secret_type: 'env'
+          secret_fields: "CI_REGISTRY,CI_REGISTRY_USER,CI_REGISTRY_PASSWORD,CI_REGISTRY_IMAGE_PREFIX"
+          mask_secrets: CI_REGISTRY_USER,CI_REGISTRY_PASSWORD
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -31,6 +43,10 @@ jobs:
           pip install build setuptools-scm pytest pytest-cov
           pip install .[dev]
 
+      - name: Show version
+        run: |
+          python -c "import setuptools_scm; print(setuptools_scm.get_version())"
+  
       - name: Build package
         run: |
           python -m build --wheel --sdist
@@ -38,9 +54,36 @@ jobs:
       - name: Run tests
         run: pytest --cov --cov-branch
 
-      - name: Show version
+      - name: Initialize Environment Variables
         run: |
-          python -c "import setuptools_scm; print(setuptools_scm.get_version())"
+          version=$(python -c "import setuptools_scm; print(setuptools_scm.get_version())")
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      - id: dockerhub-docker-login
+        name: DockerHub Docker Login
+        uses: docker/login-action@v3.4.0
+        with:
+          username: ${{ steps.dockerhub-registry-secrets.outputs.secret2 }}
+          password: ${{ steps.dockerhub-registry-secrets.outputs.secret3 }}
+          ecr: auto
+          logout: true
+
+      - name: Set up Docker buildx
+        id: setup-docker-buildx
+        uses: docker/setup-buildx-action@v3.10.0
+  
+      - name: Build and push
+        env:
+          VERSION: ${{ env.VERSION }}
+        uses: docker/build-push-action@v6.15.0
+        with:
+          context: .
+          file: Dockerfile-git-python
+          platforms: linux/386, linux/amd64, linux/arm/v6
+          push: true
+          tags: |
+            docker.io/jfheinrich/pipreqs-action:${{ env.VERSION }}
+            docker.io/jfheinrich/pipreqs-action:latest
 
       - name: Update CHANGELOG
         id: changelog
