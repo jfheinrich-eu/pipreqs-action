@@ -11,6 +11,8 @@
 (python3 -m pip install --user black isort pyupgrade)
 (python3 -m pip install --user setuptools-scm)
 (python3 -m pip install --user .[dev])
+#(python -m pip install poetry)
+#(poetry install --with dev)
 
 
 npm ci
