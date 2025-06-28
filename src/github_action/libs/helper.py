@@ -1,32 +1,20 @@
-"""
-Helper classes
-
+"""Helper module for pipreqs-action.
+This module provides utility classes and functions, such as version retrieval.
 Contains:
-    - Helper
+    - Class Helper
         - Helper::get_version() -> str
 """
 
-import os
-
-from git import Repo
+import importlib.metadata
 
 
 class Helper:  # pragma no cover
-    """Class for helper method"""
+    """Class for helper methods such as version retrieval."""
 
     @staticmethod
     def get_version() -> str:
-        """Returns the package version"""
-
-        gitbase = os.path.realpath(__file__)
-        while gitbase != "/" and not os.path.exists(os.path.join(gitbase, ".git")):
-            gitbase = os.path.realpath(os.path.join(gitbase, ".."))
-
-        repo = Repo(gitbase)
-        tags = repo.tags
-        if len(tags) > 0:
-            tags.reverse()
-            tagref = tags[0]
-            return tagref
-        else:
-            return repo.active_branch
+        """Returns the package version as set by setuptools_scm"""
+        try:
+            return importlib.metadata.version("pipreqs-action")
+        except importlib.metadata.PackageNotFoundError:
+            return "unknown"

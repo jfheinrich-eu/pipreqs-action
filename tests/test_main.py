@@ -1,4 +1,10 @@
+"""Tests for the pipreqs-action main module.
+
+Includes tests for PipReqsAction and related functionality.
+"""
+
 import os
+from pathlib import Path
 
 import pytest
 
@@ -6,7 +12,7 @@ from github_action.main import PipReqsAction
 
 
 @pytest.fixture
-def temp_dir(tmp_path):
+def temp_dir(tmp_path: Path) -> Path:
     """Create a temporary directory with some Python files for testing."""
     # Create a main Python file
     main_file = tmp_path / "main.py"
@@ -50,27 +56,30 @@ This file shoud ignored bei PipReqsActon
     return tmp_path
 
 
-def test_get_python_files_non_recursive(temp_dir):
+def test_get_python_files_non_recursive(temp_dir: Path):
     """Test getting Python files without recursive search."""
-    files = PipReqsAction.get_python_files(str(temp_dir), recursive=False)
+    action = PipReqsAction("dummy.txt", str(temp_dir), recursive=False)
+    files = action.get_python_files()
     assert len(files) == 1
     assert files[0] == str(temp_dir)
 
 
-def test_get_python_files_recursive(temp_dir):
+def test_get_python_files_recursive(temp_dir: Path):
     """Test getting Python files with recursive search."""
-    files = PipReqsAction.get_python_files(str(temp_dir), recursive=True)
+    action = PipReqsAction("dummy.txt", str(temp_dir), recursive=True)
+    files = action.get_python_files()
     assert len(files) == 2
     assert any(f.endswith("main.py") for f in files)
     assert any(f.endswith("helper.py") for f in files)
 
 
-def test_save_requirements(tmp_path):
+def test_save_requirements(tmp_path: Path):
     """Test saving requirements to a file."""
     req_file = tmp_path / "requirements.txt"
     requirements = ["requests==2.28.1\n", "json==1.0.0\n", "requests==2.28.1\n"]
 
-    PipReqsAction.save_requirements(str(req_file), requirements)
+    action = PipReqsAction(str(req_file), "dummy", False)
+    action.save_requirements(str(req_file), requirements)
 
     assert req_file.exists()
     with open(req_file) as f:
@@ -82,10 +91,11 @@ def test_save_requirements(tmp_path):
     assert "json==1.0.0\n" in saved_reqs
 
 
-def test_generate_requirements(temp_dir, tmp_path):
+def test_generate_requirements(temp_dir: Path, tmp_path: Path):
     """Test generating requirements for a Python file."""
     req_file = tmp_path / "requirements.txt"
-    requirements = PipReqsAction.generate_requirements(
+    action = PipReqsAction(str(req_file), str(temp_dir / "main.py"), False)
+    requirements = action.generate_requirements(
         str(req_file), str(temp_dir / "main.py")
     )
 
@@ -115,7 +125,7 @@ def test_get_argument_environment():
     assert value == "2025-04-26"
 
 
-def test_main_function(temp_dir, tmp_path):
+def test_main_function(temp_dir: Path, tmp_path: Path):
     """Test the main function with a complete workflow."""
     req_file = tmp_path / "requirements.txt"
     pipReqsAction = PipReqsAction(str(req_file), str(temp_dir), recursive=True)

@@ -1,18 +1,14 @@
-FROM python:3.12.11-alpine3.21 AS builder
+FROM jfheinrich/pipreqs-action:latest AS builder
 
-RUN apk add --update git
+ADD . /project
+WORKDIR /project
 
-ADD ./src /app
-RUN rm -rf /app/__pycache__ && \
-    rm -rf /app/.pytest_cache && \
-    pip3 install --target /app pipreqs && \
+RUN mkdir /app && \
+    cp -a src/ /app && \
+    python -m pip install --no-cache-dir --target /app . && \
     chmod 755 /app/app.py
 
-# Install project dependencies
-RUN if [ -f /app/requirements.txt ]; then pip3 install --target /app -r /app/requirements.txt; fi
-
-FROM python:3.12.11-alpine3.21 AS final
+FROM jfheinrich/pipreqs-action:latest AS final
 COPY --from=builder /app /app
 ENV PYTHONPATH=/app
-
 ENTRYPOINT ["/app/app.py"]
