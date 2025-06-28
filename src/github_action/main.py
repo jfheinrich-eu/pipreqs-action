@@ -2,9 +2,10 @@
 
 import os
 import sys
-
-from pipreqs import pipreqs
-
+import typing
+from pipreqs import pipreqs  # type: ignore
+if typing.TYPE_CHECKING:
+    pass
 # from typing import List
 
 
@@ -15,35 +16,28 @@ class PipReqsAction:
     project_path: str
     recursive: bool
 
-    @classmethod
     def __init__(self, requirement_path: str, project_path: str, recursive: bool):
         self.requirement_path = requirement_path
         self.project_path = project_path
         self.recursive = recursive
 
-    @classmethod
-    def get_python_files(self, project_path: str, recursive: bool) -> list[str]:
+    def get_python_files(self) -> list[str]:
         """
         Get all Python files in the project directory.
-
-        Args:
-            project_path: Path to the project directory
-            recursive: Whether to search recursively in subdirectories
 
         Returns:
             List of paths to Python files
         """
-        if not recursive:
-            return [project_path]
+        if not self.recursive:
+            return [self.project_path]
 
-        python_files = []
-        for root, _, files in os.walk(project_path):
+        python_files: list[str] = []
+        for root, _, files in os.walk(self.project_path):
             for file in files:
                 if file.endswith(".py") and not file.startswith("."):
                     python_files.append(os.path.join(root, file))
         return python_files
 
-    @classmethod
     def generate_requirements(self, file_path: str, project_path: str) -> list[str]:
         """
         Generate requirements for a single Python file using pipreqs.
@@ -55,13 +49,12 @@ class PipReqsAction:
         Returns:
             List of requirements
         """
-        # Use pipreqs programmatically with all required parameters
         project_dir = (
             os.path.dirname(project_path)
             if os.path.isfile(project_path)
             else project_path
         )
-        args = {
+        args: dict[str, typing.Any] = {
             "<path>": project_dir,
             "--savepath": file_path,
             "--force": True,
@@ -77,7 +70,7 @@ class PipReqsAction:
             "--diff": None,
             "--clean": None,
         }
-        pipreqs.init(args)
+        pipreqs.init(args)  # type: ignore
 
         try:
             with open(file_path) as f:
@@ -85,7 +78,6 @@ class PipReqsAction:
         except FileNotFoundError as e:  # pragma: no cover
             raise FileNotFoundError(f"pipreqs throws exception: {e}")
 
-    @classmethod
     def save_requirements(self, file_path: str, requirements: list[str]) -> None:
         """
         Save unique requirements to a file.
@@ -94,11 +86,11 @@ class PipReqsAction:
             file_path: Path to save requirements
             requirements: List of requirements to save
         """
-        unique_requirements = list({req for req in requirements if req.strip()})
+        unique_requirements = list(
+            {req for req in requirements if req.strip()})
         with open(file_path, "w") as f:
             f.writelines(unique_requirements)
 
-    @classmethod
     def run(self) -> list[str]:
         """
         Main function to generate and save project requirements.
@@ -106,11 +98,12 @@ class PipReqsAction:
         Returns:
             List of generated requirements
         """
-        python_files = self.get_python_files(self.project_path, self.recursive)
-        all_requirements = []
+        python_files = self.get_python_files()
+        all_requirements: list[str] = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(self.requirement_path, file_path)
+            requirements = self.generate_requirements(
+                self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
         self.save_requirements(self.requirement_path, all_requirements)
@@ -118,7 +111,7 @@ class PipReqsAction:
 
     @staticmethod
     def get_argument(
-        arg_position: int, env_name: str = None, args: list[str] = None
+        arg_position: int, env_name: typing.Optional[str] = None, args: typing.Optional[list[str]] = None
     ) -> str:
         """
         Helper function to get the program arguments from the commandline or the environment
@@ -133,4 +126,5 @@ class PipReqsAction:
         if len(ArgumentList) > arg_position:
             return ArgumentList[arg_position]
 
-        return None if env_name is None else os.getenv(env_name)
+        value = os.getenv(env_name) if env_name is not None else ""
+        return value if value is not None else ""
