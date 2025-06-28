@@ -11,8 +11,7 @@ from github_action.main import PipReqsAction
 if __name__ == "__main__":
     print(f"Version: {__version__}")
 
-    requirement_path: str = PipReqsAction.get_argument(
-        1, "INPUT_REQUIREMENT_PATH")
+    requirement_path: str = PipReqsAction.get_argument(1, "INPUT_REQUIREMENT_PATH")
     project_path: str = PipReqsAction.get_argument(2, "INPUT_PROJECT_PATH")
     recursive: str = PipReqsAction.get_argument(3, "INPUT_RECURSIVE")
 
