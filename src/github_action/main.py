@@ -9,8 +9,10 @@ Contains the PipReqsAction class for generating requirements.txt files.
 import os
 import sys
 import typing
+
 from pipreqs import pipreqs  # type: ignore
-if typing.TYPE_CHECKING:    # pragma: no cover
+
+if typing.TYPE_CHECKING:  # pragma: no cover
     pass
 # from typing import List
 
@@ -92,8 +94,7 @@ class PipReqsAction:
             file_path: Path to save requirements
             requirements: List of requirements to save
         """
-        unique_requirements = list(
-            {req for req in requirements if req.strip()})
+        unique_requirements = list({req for req in requirements if req.strip()})
         with open(file_path, "w") as f:
             f.writelines(unique_requirements)
 
@@ -108,8 +109,7 @@ class PipReqsAction:
         all_requirements: list[str] = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(
-                self.requirement_path, file_path)
+            requirements = self.generate_requirements(self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
         self.save_requirements(self.requirement_path, all_requirements)
@@ -117,7 +117,9 @@ class PipReqsAction:
 
     @staticmethod
     def get_argument(
-        arg_position: int, env_name: typing.Optional[str] = None, args: typing.Optional[list[str]] = None
+        arg_position: int,
+        env_name: str | None = None,
+        args: list[str] | None = None,
     ) -> str:
         """
         Helper function to get the program arguments from the commandline or the environment

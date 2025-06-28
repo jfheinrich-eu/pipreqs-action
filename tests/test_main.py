@@ -4,9 +4,11 @@ Includes tests for PipReqsAction and related functionality.
 """
 
 import os
-import pytest
-from github_action.main import PipReqsAction
 from pathlib import Path
+
+import pytest
+
+from github_action.main import PipReqsAction
 
 
 @pytest.fixture
@@ -74,8 +76,7 @@ def test_get_python_files_recursive(temp_dir: Path):
 def test_save_requirements(tmp_path: Path):
     """Test saving requirements to a file."""
     req_file = tmp_path / "requirements.txt"
-    requirements = ["requests==2.28.1\n",
-                    "json==1.0.0\n", "requests==2.28.1\n"]
+    requirements = ["requests==2.28.1\n", "json==1.0.0\n", "requests==2.28.1\n"]
 
     action = PipReqsAction(str(req_file), "dummy", False)
     action.save_requirements(str(req_file), requirements)
