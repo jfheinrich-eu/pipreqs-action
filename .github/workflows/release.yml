@@ -64,7 +64,7 @@ jobs:
         uses: tj-actions/verify-changed-files@v20.0.4
         with:
           files: Dockerfile-git-python
-      
+
       - id: dockerhub-docker-login
         name: DockerHub Docker Login
         if: steps.check-dockerfile-git-python.outputs.files_changed == 'true'
@@ -102,7 +102,7 @@ jobs:
           repository: jfheinrich/pipreqs-action
           short-description: ""
           readme-filepath: README-Dockerfile-git-python.md
-          enable-url-completion: true            
+          enable-url-completion: true
 
       - name: Update CHANGELOG
         id: changelog

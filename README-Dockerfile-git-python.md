@@ -55,15 +55,15 @@ CMD ["python3", "your_script.py"]
 
 ## License
 
-This image is provided as-is under the MIT License.  
-Git is licensed under the GNU General Public License v2.0.  
+This image is provided as-is under the MIT License.
+Git is licensed under the GNU General Public License v2.0.
 Python is licensed under the Python Software Foundation License.
 
 ---
 
 ## Maintainer
 
-Joerg Heinrich  
+Joerg Heinrich
 [joerg@jfheinrich.eu](mailto:joerg@jfheinrich.eu)
 
 ---
