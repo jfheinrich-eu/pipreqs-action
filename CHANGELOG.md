@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.3.0] - 2025-06-28
+### :sparkles: New Features
+- [`0df55bd`](https://github.com/jfheinrich-eu/pipreqs-action/commit/0df55bdbfd1dddd9fa2e4aa9b2085ad8c88a103f) - add Dockerfile for building custom Python image with Git *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`d8d5020`](https://github.com/jfheinrich-eu/pipreqs-action/commit/d8d5020e73d763040173871263989ed8f8f2c126) - add GitHub workflows for labeler and CI configuration *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`e92a644`](https://github.com/jfheinrich-eu/pipreqs-action/commit/e92a644eb58f33726a0060a0cd1c3eed98a10704) - update Python version to 3.12 in lint_tests workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :bug: Bug Fixes
+- [`9f411cb`](https://github.com/jfheinrich-eu/pipreqs-action/commit/9f411cb727e508f23c9efdf4eff7a179868c3b86) - update Dockerfile to use pipreqs-action base image and streamline build process *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :recycle: Refactors
+- [`59dd441`](https://github.com/jfheinrich-eu/pipreqs-action/commit/59dd441a12692431cee3f8a481354c61b9abc6c3) - improve code structure and readability in app.py, helper.py, main.py, and test_main.py *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`0c510ce`](https://github.com/jfheinrich-eu/pipreqs-action/commit/0c510ce944a84c84b2fd926ba02da48bc12ac384) - reorganize pytest configuration in pyproject.toml for improved clarity *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`4698d52`](https://github.com/jfheinrich-eu/pipreqs-action/commit/4698d529e1d562956994cf5bb9ca1588d5659ee6) - enhance module docstrings for clarity in app.py, helper.py, and main.py *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`6b1ffe2`](https://github.com/jfheinrich-eu/pipreqs-action/commit/6b1ffe2632ea5c9f29c9fdea8e3603a6418c73ed) - update module docstring in test_main.py for improved clarity *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`60c5acb`](https://github.com/jfheinrich-eu/pipreqs-action/commit/60c5acb002dc8b2988f68a816c063154c6ae5ac2) - clean up code formatting and improve readability in workflow and Python files *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`1580074`](https://github.com/jfheinrich-eu/pipreqs-action/commit/1580074f4e5d3b81f062e69f9c53d47f021d894f) - comment out poetry installation in postAttachCommands.sh *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.2.7] - 2025-06-21
 ### :recycle: Refactors
 - [`9fa66e2`](https://github.com/jfheinrich-eu/pipreqs-action/commit/9fa66e2ec383308c72abe040c34ffa2ef7ca6838) - consolidate release creation and asset upload steps in workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -100,3 +120,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.2.4]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.3...v4.2.4
 [v4.2.5]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.4...v4.2.5
 [v4.2.7]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.6...v4.2.7
+[v4.3.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.7...v4.3.0
