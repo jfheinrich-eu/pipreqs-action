@@ -1,10 +1,11 @@
+"""Tests for the pipreqs-action main module.
+
+Includes tests for PipReqsAction and related functionality.
+"""
+
 import os
-
 import pytest
-
 from github_action.main import PipReqsAction
-
-
 from pathlib import Path
 
 
