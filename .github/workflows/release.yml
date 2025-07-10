@@ -9,12 +9,16 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
-  release:
+  secret_whisperer:
     runs-on: ubuntu-latest
+    outputs:
+      CI_REGISTRY: ${{ steps.dockerhub-registry-secrets.outputs.secret1 }}
+      CI_REGISTRY_USER: ${{ steps.dockerhub-registry-secrets.outputs.secret2 }}
+      CI_REGISTRY_PASSWORD: ${{ steps.dockerhub-registry-secrets.outputs.secret3 }}
+      CI_REGISTRY_IMAGE_PREFIX: ${{ steps.dockerhub-registry-secrets.outputs.secret4 }}
     defaults:
       run:
         shell: bash
-
     steps:
       - name: Get DockerHub Registry Secrets
         id: dockerhub-registry-secrets
@@ -27,7 +31,14 @@ jobs:
           secret_type: 'env'
           secret_fields: "CI_REGISTRY,CI_REGISTRY_USER,CI_REGISTRY_PASSWORD,CI_REGISTRY_IMAGE_PREFIX"
           mask_secrets: CI_REGISTRY_USER,CI_REGISTRY_PASSWORD
-
+  tests:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.set-version.outputs.VERSION }}
+    defaults:
+      run:
+        shell: bash
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
         with:
@@ -47,54 +58,172 @@ jobs:
         run: |
           python -c "import setuptools_scm; print(setuptools_scm.get_version())"
 
+      - name: Run tests
+        run: pytest --cov --cov-branch
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5.4.3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      
+      - name: Initialize Environment Variables
+        id: set-version
+        run: |
+          version=$(python -c "import setuptools_scm; print(setuptools_scm.get_version())")
+          echo "VERSION=$version" >> $GITHUB_OUTPUT
+
+  buid_python_dist:
+    needs: tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install build setuptools-scm pytest pytest-cov
+          pip install .[dev]
+
       - name: Build package
         run: |
           python -m build --wheel --sdist
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: python-package-artifacts
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
 
-      - name: Run tests
-        run: pytest --cov --cov-branch
+  build_and_push_image:
+    needs:
+      - secret_whisperer
+      - tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      VERSION: ${{ needs.tests.outputs.VERSION }}
+    strategy:
+      matrix:
+        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm]
+      fail-fast: false
 
-      - name: Initialize Environment Variables
-        run: |
-          version=$(python -c "import setuptools_scm; print(setuptools_scm.get_version())")
-          echo "VERSION=$version" >> $GITHUB_ENV
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
 
       - id: dockerhub-docker-login
         name: DockerHub Docker Login
         uses: docker/login-action@v3.4.0
         with:
-          username: ${{ steps.dockerhub-registry-secrets.outputs.secret2 }}
-          password: ${{ steps.dockerhub-registry-secrets.outputs.secret3 }}
+          username: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_USER }}
+          password: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
           ecr: auto
           logout: true
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
 
       - name: Set up Docker buildx
         id: setup-docker-buildx
         uses: docker/setup-buildx-action@v3.11.1
 
-      - name: Build and push
+      - name: Build and push image for ${{ matrix.arch }}
         env:
           VERSION: ${{ env.VERSION }}
         uses: docker/build-push-action@v6.18.0
+        continue-on-error: true
         with:
           context: .
           file: Dockerfile-git-python
-          platforms: linux/386, linux/amd64, linux/arm/v6
+          platforms: ${{ matrix.arch }}
           push: true
           tags: |
-            docker.io/jfheinrich/pipreqs-action:${{ env.VERSION }}
-            docker.io/jfheinrich/pipreqs-action:latest
+            docker.io/jfheinrich/pipreqs-action:${{ matrix.arch }}-${{ env.VERSION }}
+          labels: |
+            org.opencontainers.image.title=pipreqs-action
+            org.opencontainers.image.name=jfheinrich/pipreqs-action
+            org.opencontainers.image.version=${{ env.VERSION }}
+            org.opencontainers.image.description=Automatically generates pip requirement files based on imports in your Python project.
+            org.opencontainers.image.url=https://github.com/jfheinrich-eu/pipreqs-action
+            org.opencontainers.image.source=https://github.com/jfheinrich-eu/pipreqs-action
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.authors=J.F. Heinrich <jfheinrich@users.noreply.github.com>
 
+  manifest:
+    name: Create and Push Multiarch Manifest
+    needs: 
+      - secret_whisperer
+      - tests
+      - build_and_push_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v3.4.0
+        with:
+          username: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_USER }}
+          password: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
+
+      - name: Create and push manifest
+        run: |
+          IMAGE=jfheinrich/pipreqs-action
+          VERSION=${{ needs.tests.outputs.VERSION }}
+          ARCHES=("linux-amd64" "linux-386" "linux-arm-v6" "linux-arm")
+          TAGS=()
+          for ARCH in "${ARCHES[@]}"; do
+            FULL_TAG="$IMAGE:$ARCH-$VERSION"
+            if docker manifest inspect "$FULL_TAG" > /dev/null 2>&1; then
+              TAGS+=("$FULL_TAG")
+            fi
+          done
+          if [ ${#TAGS[@]} -gt 0 ]; then
+            docker manifest create "$IMAGE:latest" "${TAGS[@]}"
+            docker manifest push "$IMAGE:latest"
+          else
+            echo "No tags found, skipping."
+          fi
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v4.0.2
         with:
-          username: ${{ steps.dockerhub-registry-secrets.outputs.secret2 }}
-          password: ${{ steps.dockerhub-registry-secrets.outputs.secret3 }}
+          username: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_USER }}
+          password: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
           repository: jfheinrich/pipreqs-action
-          short-description: ""
+          short-description: "Automatically generates pip requirement files based on imports in your Python project."
           readme-filepath: README-Dockerfile-git-python.md
-          enable-url-completion: true
+          enable-url-completion: true        
 
+  create_release:
+    needs: 
+      - buid_python_dist
+      - manifest
+      - build_and_push_image
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0  # Fetch all history for accurate changelog generation
+
+      - name: Download Python package artifacts
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: python-package-artifacts
+          
       - name: Update CHANGELOG
         id: changelog
         uses: requarks/changelog-action@v1.10.2
