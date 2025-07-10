@@ -2,7 +2,7 @@
 
 ## Overview
 
-This image provides a minimal Python 3.12 environment based on Alpine Linux, bundled with a custom-built version of Git (v2.50.0). It is designed for CI/CD pipelines, automation tasks, and development environments that require both Python and an up-to-date Git installation.
+This image provides a minimal Python 3.12 environment based on Alpine Linux, bundled with a custom-built version of Git (v2.50.0) and the Github Action jfheinrich-eu/pipreqs-action. It is designed for use from the Gthub action.
 
 ---
 
@@ -10,6 +10,7 @@ This image provides a minimal Python 3.12 environment based on Alpine Linux, bun
 
 - **Python 3.12** based on Alpine Linux for a small footprint
 - **Git 2.50.0** built from source and installed to `/opt/git`
+- **jfheinrich-eu/pipreqs-action v4**
 - Multi-stage build for a clean and minimal final image
 - Environment variables set for Git binaries and libraries
 
@@ -18,19 +19,7 @@ This image provides a minimal Python 3.12 environment based on Alpine Linux, bun
 ## Usage
 
 ```sh
-docker pull jfheinrich/pipreqs-action:latest
-```
-
-Run a Python script inside the container:
-
-```sh
-docker run --rm -it jfheinrich/pipreqs-action python3 your_script.py
-```
-
-Git is available on the `PATH`:
-
-```sh
-docker run --rm -it jfheinrich/pipreqs-action git --version
+docker pull jfheinrich/pipreqs-action:latest requirements.txt . "true"
 ```
 
 ---
@@ -45,9 +34,8 @@ docker run --rm -it jfheinrich/pipreqs-action git --version
 ## Example Dockerfile (for your own builds)
 
 ```dockerfile
-FROM jfheinrich/pipreqs-action:latest
-COPY . /app
-WORKDIR /app
+FROM jfheinrich/pipreqs-action:latest AS builder
+
 CMD ["python3", "your_script.py"]
 ```
 

@@ -16,9 +16,6 @@ jobs:
       CI_REGISTRY_USER: ${{ steps.dockerhub-registry-secrets.outputs.secret2 }}
       CI_REGISTRY_PASSWORD: ${{ steps.dockerhub-registry-secrets.outputs.secret3 }}
       CI_REGISTRY_IMAGE_PREFIX: ${{ steps.dockerhub-registry-secrets.outputs.secret4 }}
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Get DockerHub Registry Secrets
         id: dockerhub-registry-secrets
@@ -31,21 +28,17 @@ jobs:
           secret_type: 'env'
           secret_fields: "CI_REGISTRY,CI_REGISTRY_USER,CI_REGISTRY_PASSWORD,CI_REGISTRY_IMAGE_PREFIX"
           mask_secrets: CI_REGISTRY_USER,CI_REGISTRY_PASSWORD
+
   tests:
     runs-on: ubuntu-latest
     outputs:
       VERSION: ${{ steps.set-version.outputs.VERSION }}
-    defaults:
-      run:
-        shell: bash
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.2.2
         with:
-          fetch-depth: 0  # Fetch all history for accurate changelog generation
+          fetch-depth: 0
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5.6.0
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: "3.12"
 
@@ -54,93 +47,46 @@ jobs:
           pip install build setuptools-scm pytest pytest-cov
           pip install .[dev]
 
-      - name: Show version
-        run: |
-          python -c "import setuptools_scm; print(setuptools_scm.get_version())"
-
-      - name: Run tests
+      - name: Run tests with coverage
         run: pytest --cov --cov-branch
-        
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5.4.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      
-      - name: Initialize Environment Variables
+
+      - name: Set version output
         id: set-version
         run: |
           version=$(python -c "import setuptools_scm; print(setuptools_scm.get_version())")
           echo "VERSION=$version" >> $GITHUB_OUTPUT
-
-  buid_python_dist:
-    needs: tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5.6.0
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: |
-          pip install build setuptools-scm pytest pytest-cov
-          pip install .[dev]
-
-      - name: Build package
-        run: |
-          python -m build --wheel --sdist
-      - name: Upload package artifacts
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: python-package-artifacts
-          path: |
-            dist/*.whl
-            dist/*.tar.gz
 
   build_and_push_image:
     needs:
       - secret_whisperer
       - tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    env:
-      VERSION: ${{ needs.tests.outputs.VERSION }}
     strategy:
       matrix:
         arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm]
       fail-fast: false
-
+    env:
+      VERSION: ${{ needs.tests.outputs.VERSION }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.2.2
 
-      - id: dockerhub-docker-login
-        name: DockerHub Docker Login
+      - name: Docker login
         uses: docker/login-action@v3.4.0
         with:
           username: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_USER }}
           password: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
-          ecr: auto
-          logout: true
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.6.0
+      - uses: docker/setup-qemu-action@v3.6.0
 
-      - name: Set up Docker buildx
-        id: setup-docker-buildx
-        uses: docker/setup-buildx-action@v3.11.1
+      - uses: docker/setup-buildx-action@v3.11.1
 
-      - name: Build and push image for ${{ matrix.arch }}
-        env:
-          VERSION: ${{ env.VERSION }}
+      - name: Build and push image
+        id: docker-build
         uses: docker/build-push-action@v6.18.0
         continue-on-error: true
         with:
@@ -148,8 +94,7 @@ jobs:
           file: Dockerfile-git-python
           platforms: ${{ matrix.arch }}
           push: true
-          tags: |
-            docker.io/jfheinrich/pipreqs-action:${{ matrix.arch }}-${{ env.VERSION }}
+          tags: docker.io/jfheinrich/pipreqs-action:${{ matrix.arch }}-${{ env.VERSION }}
           labels: |
             org.opencontainers.image.title=pipreqs-action
             org.opencontainers.image.name=jfheinrich/pipreqs-action
@@ -162,19 +107,40 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.authors=J.F. Heinrich <jfheinrich@users.noreply.github.com>
 
+      - name: Save build status
+        if: always()
+        run: |
+          echo "${{ matrix.arch }}: ${{ steps.docker-build.outcome }}" >> status.txt
+
+      - name: Upload build status artifact
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: build-status-${{ matrix.arch }}
+          path: status.txt
+
   manifest:
-    name: Create and Push Multiarch Manifest
-    needs: 
+    needs:
+      - build_and_push_image
       - secret_whisperer
       - tests
-      - build_and_push_image
     runs-on: ubuntu-latest
     steps:
-      - name: Login to DockerHub
+      - name: Docker login
         uses: docker/login-action@v3.4.0
         with:
           username: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_USER }}
           password: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
+
+      - name: Download all build statuses
+        uses: actions/download-artifact@v4.3.0
+        with:
+          path: build-statuses
+
+      - name: Display build results
+        run: |
+          echo "## 🐳 Docker Build Matrix Results" >> $GITHUB_STEP_SUMMARY
+          cat build-statuses/*/status.txt >> $GITHUB_STEP_SUMMARY
 
       - name: Create and push manifest
         run: |
@@ -194,7 +160,8 @@ jobs:
           else
             echo "No tags found, skipping."
           fi
-      - name: Update repo description
+
+      - name: Update DockerHub description
         uses: peter-evans/dockerhub-description@v4.0.2
         with:
           username: ${{ needs.secret_whisperer.outputs.CI_REGISTRY_USER }}
@@ -202,29 +169,50 @@ jobs:
           repository: jfheinrich/pipreqs-action
           short-description: "Automatically generates pip requirement files based on imports in your Python project."
           readme-filepath: README-Dockerfile-git-python.md
-          enable-url-completion: true        
+          enable-url-completion: true
+
+  build_python_dist:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install build setuptools-scm pytest pytest-cov
+          pip install .[dev]
+
+      - name: Build package
+        run: |
+          python -m build --wheel --sdist
+
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: python-dist
+          path: dist/
 
   create_release:
-    needs: 
-      - buid_python_dist
+    needs:
+      - build_python_dist
       - manifest
-      - build_and_push_image
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.2.2
         with:
-          fetch-depth: 0  # Fetch all history for accurate changelog generation
+          fetch-depth: 0
 
       - name: Download Python package artifacts
         uses: actions/download-artifact@v4.3.0
         with:
-          name: python-package-artifacts
-          
-      - name: Update CHANGELOG
+          name: python-dist
+          path: dist/
+
+      - name: Generate changelog
         id: changelog
         uses: requarks/changelog-action@v1.10.2
         with:
@@ -239,12 +227,12 @@ jobs:
           commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
           file_pattern: CHANGELOG.md
 
-      - name: Create Release And Upload Assets
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2.3.2
         with:
-          body: ${{ steps.changelog.outputs.changes }}
           tag_name: ${{ github.ref_name }}
           name: 'Release ${{ github.ref_name }}'
+          body: ${{ steps.changelog.outputs.changes }}
           files: dist/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
