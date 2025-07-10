@@ -31,10 +31,25 @@ RUN <<EOF
     make install
 EOF
 
-# Stage 2: Final image
-FROM python:3.12-alpine AS final
+# Stage 2: Final base image
+FROM python:3.12-alpine AS final_base
 COPY --from=base /opt/git /opt/git
 ENV PATH="/opt/git/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/opt/git/lib"
 
 CMD ["python3"]
+
+# Stage 3: Application build image
+FROM final_base AS builder
+ADD . /project
+WORKDIR /project
+RUN mkdir /app && \
+    cp -a src/ /app && \
+    python -m pip install --no-cache-dir --target /app . && \
+    chmod 755 /app/app.py
+
+# Stage 4: Final application image
+FROM final_base AS final
+COPY --from=builder /app /app
+ENV PYTHONPATH=/app
+ENTRYPOINT ["/app/app.py"]
