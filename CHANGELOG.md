@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.3.1] - 2025-07-12
+### :sparkles: New Features
+- [`4d5b233`](https://github.com/jfheinrich-eu/pipreqs-action/commit/4d5b23387ce17b25ca205a559e4722e9d70ccb4f) - add Dockerfile change verification and update related actions in release workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :bug: Bug Fixes
+- [`f366a96`](https://github.com/jfheinrich-eu/pipreqs-action/commit/f366a96e4644fcbf1519fa39c33af6f692e3f5c9) - resolve secret issues *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`1fa9ecc`](https://github.com/jfheinrich-eu/pipreqs-action/commit/1fa9ecc632217b288fa18c29fb651738ba096f0d) - insert forgotten checkout *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`5cbdbca`](https://github.com/jfheinrich-eu/pipreqs-action/commit/5cbdbca874ce2b477e292c27a9327634fce777da) - rename directory with local action *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`bd170be`](https://github.com/jfheinrich-eu/pipreqs-action/commit/bd170bed31d0957e688f1d40e7fa21493d065a72) - Add inputs to local action *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :recycle: Refactors
+- [`ae8e3ca`](https://github.com/jfheinrich-eu/pipreqs-action/commit/ae8e3caeaea0749612db9e8f6a4e6d9f8b79d7b3) - use a complete base image *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`a3cb4b7`](https://github.com/jfheinrich-eu/pipreqs-action/commit/a3cb4b7cc5ca187f3a4c0a888b88eb9be42399a7) - robust and clearer structure *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`6a95086`](https://github.com/jfheinrich-eu/pipreqs-action/commit/6a95086f0dc9a22c5c2eb59159a10b2c6556b01c) - image build and push *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`4cb197c`](https://github.com/jfheinrich-eu/pipreqs-action/commit/4cb197c0837dbcef8be0347ff4c57d362efe35fb) - **deps**: bump jefflinse/pr-semver-bump from 1.7.2 to 1.7.3 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`2232f76`](https://github.com/jfheinrich-eu/pipreqs-action/commit/2232f764fb9e1ea576010ec4457f1b5da99c584f) - **deps**: bump brace-expansion in the npm_and_yarn group *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`d197c25`](https://github.com/jfheinrich-eu/pipreqs-action/commit/d197c2501a1738cd1e9211267dcfa40f9fba70c0) - **deps**: bump @template-tools/sync-cli from 3.5.40 to 3.5.74 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`c6c46a9`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c6c46a931bb5218f92f91211636ec237499905da) - add daily report *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.3.0] - 2025-06-28
 ### :sparkles: New Features
 - [`0df55bd`](https://github.com/jfheinrich-eu/pipreqs-action/commit/0df55bdbfd1dddd9fa2e4aa9b2085ad8c88a103f) - add Dockerfile for building custom Python image with Git *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -121,3 +143,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.2.5]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.4...v4.2.5
 [v4.2.7]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.6...v4.2.7
 [v4.3.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.7...v4.3.0
+[v4.3.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.3.0...v4.3.1
