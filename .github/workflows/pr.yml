@@ -17,9 +17,9 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
-      - uses: octue/generate-pull-request-description@1.0.0.beta-2
+      - uses: tanmay-pathak/generate-pull-request-description@v1.0.0
         id: pr-description
         with:
           pull_request_url: ${{ github.event.pull_request.url }}
@@ -58,9 +58,9 @@ jobs:
           secret_fields: "password"
           mask_secrets: password
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
-      - uses: jefflinse/pr-semver-bump@v1.7.3
+      - uses: jefflinse/pr-semver-bump@v1.7.1
         name: Validate Pull Request Metadata
         with:
           mode: validate
