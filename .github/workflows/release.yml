@@ -72,6 +72,13 @@ jobs:
       - uses: docker/setup-qemu-action@v3.6.0
 
       - uses: docker/setup-buildx-action@v3.11.1
+        
+      - name: Sanitize Architecture
+        id: sanitize-arch
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          echo "ARCH_SAFE=${ARCH//\//-}" >> $GITHUB_OUTPUT
 
       - name: Build and push image
         id: docker-build
@@ -82,7 +89,7 @@ jobs:
           file: Dockerfile-git-python
           platforms: ${{ matrix.arch }}
           push: true
-          tags: docker.io/jfheinrich/pipreqs-action:${{ matrix.arch }}-${{ env.VERSION }}
+          tags: docker.io/jfheinrich/pipreqs-action:${{ steps.sanitize-arch.outputs.ARCH_SAFE }}-${{ env.VERSION }}
           labels: |
             org.opencontainers.image.title=pipreqs-action
             org.opencontainers.image.name=jfheinrich/pipreqs-action
@@ -98,17 +105,14 @@ jobs:
       - name: Save build status
         id: build-status
         if: always()
-        env:
-          ARCH: ${{ matrix.arch }}
         run: |
           echo "${{ matrix.arch }}: ${{ steps.docker-build.outcome }}" >> status.txt
-          echo "ARCH_SAFE=${ARCH//\//-}" >> $GITHUB_OUTPUT
 
       - name: Upload build status artifact
         if: always()
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: build-status-${{ steps.build-status.outputs.ARCH_SAFE }}
+          name: build-status-${{ steps.sanitize-arch.outputs.ARCH_SAFE }}
           path: status.txt
 
   manifest:
