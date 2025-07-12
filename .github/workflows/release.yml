@@ -57,6 +57,11 @@ jobs:
       - name: Dockerhub Registry Secrets
         id: secret_whisperer
         uses: ./.github/actions/secret_whisperer_dockerhub_registry
+        with:
+          PSONO_API_KEY_ID: ${{ secrets.PSONO_API_KEY_ID }}
+          PSONO_API_SECRET_KEY_HEX: ${{ secrets.PSONO_API_SECRET_KEY_HEX }}
+          PSONO_SERVER_URL: ${{ vars.PSONO_SERVER_URL }}
+          PSONO_DOCKERHUB_REGISTRY_ID: ${{ secrets.PSONO_DOCKERHUB_REGISTRY_ID }}
 
       - name: Docker login
         uses: docker/login-action@v3.4.0
@@ -117,6 +122,11 @@ jobs:
       - name: Dockerhub Registry Secrets
         id: secret_whisperer
         uses: ./.github/actions/secret_whisperer_dockerhub_registry
+        with:
+          PSONO_API_KEY_ID: ${{ secrets.PSONO_API_KEY_ID }}
+          PSONO_API_SECRET_KEY_HEX: ${{ secrets.PSONO_API_SECRET_KEY_HEX }}
+          PSONO_SERVER_URL: ${{ vars.PSONO_SERVER_URL }}
+          PSONO_DOCKERHUB_REGISTRY_ID: ${{ secrets.PSONO_DOCKERHUB_REGISTRY_ID }}
 
       - name: Docker login
         uses: docker/login-action@v3.4.0
