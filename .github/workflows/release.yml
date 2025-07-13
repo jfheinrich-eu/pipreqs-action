@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
-        
+
       - name: Dockerhub Registry Secrets
         id: secret_whisperer
         uses: ./.github/actions/secret_whisperer_dockerhub_registry
@@ -141,6 +141,7 @@ jobs:
       - name: Download all build statuses
         uses: actions/download-artifact@v4.3.0
         with:
+          pattern: build-status-*
           path: build-statuses
 
       - name: Display build results
@@ -150,21 +151,42 @@ jobs:
 
       - name: Create and push manifest
         run: |
+          set -euo pipefail
+
           IMAGE=jfheinrich/pipreqs-action
           VERSION=${{ needs.tests.outputs.VERSION }}
           ARCHES=("linux-amd64" "linux-386" "linux-arm-v6" "linux-arm")
           TAGS=()
+
+          echo "🔍 Check architectures for manifest creation..."
+
           for ARCH in "${ARCHES[@]}"; do
-            FULL_TAG="$IMAGE:$ARCH-$VERSION"
-            if docker manifest inspect "$FULL_TAG" > /dev/null 2>&1; then
-              TAGS+=("$FULL_TAG")
+            TAG="$IMAGE:$ARCH-$VERSION"
+            echo "➡️  Test $TAG ..."
+
+            if docker buildx imagetools inspect "$TAG" > inspect.out 2>/dev/null; then
+              if ! grep -q "unknown/unknown" inspect.out; then
+                echo "✅ $TAG is valid"
+                TAGS+=("$TAG")
+              else
+                echo "⚠️  $TAG Contains unknown/unknown -is skipped"
+              fi
+            else
+              echo "❌ $TAG does not exist -is skipped"
             fi
           done
+
           if [ ${#TAGS[@]} -gt 0 ]; then
+            echo "🛠  Create manifest for version: $VERSION"
+            docker manifest create "$IMAGE:$VERSION" "${TAGS[@]}"
+            docker manifest push "$IMAGE:$VERSION"
+
+            echo "🛠  Create manifest for 'latest'"
             docker manifest create "$IMAGE:latest" "${TAGS[@]}"
             docker manifest push "$IMAGE:latest"
           else
-            echo "No tags found, skipping."
+            echo "🚫 No valid tags found -Manifest is not created."
+            exit 1
           fi
 
       - name: Update DockerHub description
