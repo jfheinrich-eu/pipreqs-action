@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.3.2] - 2025-07-13
+### :bug: Bug Fixes
+- [`c70b01d`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c70b01d9bc8db4a6b66f3303fd10a5615e1bafa0) - sanitize docker image tag names *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :recycle: Refactors
+- [`2b39f0a`](https://github.com/jfheinrich-eu/pipreqs-action/commit/2b39f0a3a4f132be42d8fdec6f4895ec2a292192) - refactor manifest creation *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`2f77592`](https://github.com/jfheinrich-eu/pipreqs-action/commit/2f775921bfe1e480e0a4603365fa1d4e3a8705fa) - build multiarch image in one step *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`7138722`](https://github.com/jfheinrich-eu/pipreqs-action/commit/71387223d51fef73983ab0c0154aeb34fa8d3308) - **vscode**: configure translator *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.3.1] - 2025-07-12
 ### :sparkles: New Features
 - [`4d5b233`](https://github.com/jfheinrich-eu/pipreqs-action/commit/4d5b23387ce17b25ca205a559e4722e9d70ccb4f) - add Dockerfile change verification and update related actions in release workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -144,3 +156,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.2.7]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.6...v4.2.7
 [v4.3.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.7...v4.3.0
 [v4.3.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.3.0...v4.3.1
+[v4.3.2]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.3.1...v4.3.2
