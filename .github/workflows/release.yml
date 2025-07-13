@@ -45,11 +45,8 @@ jobs:
     needs:
       - tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm]
-      fail-fast: false
     env:
+      PLATFORMS: "linux/386,linux/amd64"
       VERSION: ${{ needs.tests.outputs.VERSION }}
     steps:
       - uses: actions/checkout@v4.2.2
@@ -73,23 +70,17 @@ jobs:
 
       - uses: docker/setup-buildx-action@v3.11.1
         
-      - name: Sanitize Architecture
-        id: sanitize-arch
-        env:
-          ARCH: ${{ matrix.arch }}
-        run: |
-          echo "ARCH_SAFE=${ARCH//\//-}" >> $GITHUB_OUTPUT
-
       - name: Build and push image
         id: docker-build
         uses: docker/build-push-action@v6.18.0
-        continue-on-error: true
         with:
           context: .
           file: Dockerfile-git-python
-          platforms: ${{ matrix.arch }}
+          platforms: ${{ env.PLATFORMS }}
           push: true
-          tags: docker.io/jfheinrich/pipreqs-action:${{ steps.sanitize-arch.outputs.ARCH_SAFE }}-${{ env.VERSION }}
+          tags: |
+            docker.io/jfheinrich/pipreqs-action:${{ env.VERSION }}
+            docker.io/jfheinrich/pipreqs-action:latest
           labels: |
             org.opencontainers.image.title=pipreqs-action
             org.opencontainers.image.name=jfheinrich/pipreqs-action
@@ -101,94 +92,7 @@ jobs:
             org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.authors=J.F. Heinrich <jfheinrich@users.noreply.github.com>
-
-      - name: Save build status
-        id: build-status
-        if: always()
-        run: |
-          echo "${{ matrix.arch }}: ${{ steps.docker-build.outcome }}" >> status.txt
-
-      - name: Upload build status artifact
-        if: always()
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: build-status-${{ steps.sanitize-arch.outputs.ARCH_SAFE }}
-          path: status.txt
-
-  manifest:
-    needs:
-      - build_and_push_image
-      - tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.2
-
-      - name: Dockerhub Registry Secrets
-        id: secret_whisperer
-        uses: ./.github/actions/secret_whisperer_dockerhub_registry
-        with:
-          PSONO_API_KEY_ID: ${{ secrets.PSONO_API_KEY_ID }}
-          PSONO_API_SECRET_KEY_HEX: ${{ secrets.PSONO_API_SECRET_KEY_HEX }}
-          PSONO_SERVER_URL: ${{ vars.PSONO_SERVER_URL }}
-          PSONO_DOCKERHUB_REGISTRY_ID: ${{ secrets.PSONO_DOCKERHUB_REGISTRY_ID }}
-
-      - name: Docker login
-        uses: docker/login-action@v3.4.0
-        with:
-          username: ${{ steps.secret_whisperer.outputs.CI_REGISTRY_USER }}
-          password: ${{ steps.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
-
-      - name: Download all build statuses
-        uses: actions/download-artifact@v4.3.0
-        with:
-          pattern: build-status-*
-          path: build-statuses
-
-      - name: Display build results
-        run: |
-          echo "## 🐳 Docker Build Matrix Results" >> $GITHUB_STEP_SUMMARY
-          cat build-statuses/*/status.txt >> $GITHUB_STEP_SUMMARY
-
-      - name: Create and push manifest
-        run: |
-          set -euo pipefail
-
-          IMAGE=jfheinrich/pipreqs-action
-          VERSION=${{ needs.tests.outputs.VERSION }}
-          ARCHES=("linux-amd64" "linux-386" "linux-arm-v6" "linux-arm")
-          TAGS=()
-
-          echo "🔍 Check architectures for manifest creation..."
-
-          for ARCH in "${ARCHES[@]}"; do
-            TAG="$IMAGE:$ARCH-$VERSION"
-            echo "➡️  Test $TAG ..."
-
-            if docker buildx imagetools inspect "$TAG" > inspect.out 2>/dev/null; then
-              if ! grep -q "unknown/unknown" inspect.out; then
-                echo "✅ $TAG is valid"
-                TAGS+=("$TAG")
-              else
-                echo "⚠️  $TAG Contains unknown/unknown -is skipped"
-              fi
-            else
-              echo "❌ $TAG does not exist -is skipped"
-            fi
-          done
-
-          if [ ${#TAGS[@]} -gt 0 ]; then
-            echo "🛠  Create manifest for version: $VERSION"
-            docker manifest create "$IMAGE:$VERSION" "${TAGS[@]}"
-            docker manifest push "$IMAGE:$VERSION"
-
-            echo "🛠  Create manifest for 'latest'"
-            docker manifest create "$IMAGE:latest" "${TAGS[@]}"
-            docker manifest push "$IMAGE:latest"
-          else
-            echo "🚫 No valid tags found -Manifest is not created."
-            exit 1
-          fi
-
+  
       - name: Update DockerHub description
         uses: peter-evans/dockerhub-description@v4.0.2
         with:
@@ -227,7 +131,6 @@ jobs:
   create_release:
     needs:
       - build_python_dist
-      - manifest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
