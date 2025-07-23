@@ -62,7 +62,7 @@ jobs:
 
       - name: Create report file with date
         id: create_report_file
-        if: ${{ steps.daily_report.outputs.report_status == 'success' }}
+        if: steps.daily_report.outputs.report_status == 'success'
         run: |
           echo "Creating report file with date..."
           REPORT_NAME="daily-report-$(date +'%Y-%m-%d').md"
@@ -72,7 +72,7 @@ jobs:
           echo "report_file_created=success" >> $GITHUB_OUTPUT
           echo "report_file_name=$report_file_name" >> $GITHUB_OUTPUT
       - name: Upload Daily Report
-        if: ${{ steps.daily_report.outputs.report_status == 'success' }} && ${{ steps.create_report_file.outputs.report_file_created == 'success' }}
+        if: steps.daily_report.outputs.report_status == 'success' && steps.create_report_file.outputs.report_file_created == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: daily-report
