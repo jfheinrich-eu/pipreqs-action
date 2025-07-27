@@ -99,52 +99,62 @@ class PipReqsAction:
         Returns:
             Warning message if duplicates with different versions were found, else empty string.
         """
+        module_versions, warnings = self.__filter_requirements(requirements)
+        requirements = []
+        with open(file_path, "w", encoding="utf-8") as f:
+            for module, version in module_versions.items():
+                line = f"{module}=={version}" if version else module
+                requirements.append(line)
+                f.write(line + "\n")
+
+        self.__report_duplicate_modules(requirements, warnings)
+
+        return "\n".join(warnings) if warnings else ""
+
+    def __report_duplicate_modules(
+        self, requirements: list[str], warnings: list[str]
+    ) -> None:
+        module_names = [
+            m.group(1)
+            for req in requirements
+            if req.strip() and (m := re.match(r"^([a-zA-Z0-9_\-]+)", req.strip()))
+        ]
+        duplicates = {name for name in module_names if module_names.count(name) > 1}
+        if duplicates:
+            warnings.append(
+                "Warning: Duplicate modules still found after filtering:"
+                f" {', '.join(sorted(duplicates))}"
+            )
+
+    def __filter_requirements(
+        self, requirements: list[str]
+    ) -> tuple[dict[str, str], list[str]]:
         version_pattern = re.compile(r"^([a-zA-Z0-9_\-]+)==([\d\.]+)")
         module_versions: dict[str, str] = {}
         warnings: list[str] = []
 
-        for req in requirements:
-            req = req.strip()
-            if not req:
-                continue
+        for req in (r.strip() for r in requirements if r.strip()):
             match = version_pattern.match(req)
             if match:
                 module, version = match.groups()
                 prev_version = module_versions.get(module)
                 if prev_version is not None and prev_version != version:
                     warnings.append(
-                        f"Module '{module}' found with versions {prev_version} and {version}. Using highest version.")
+                        f"Module '{module}' found with versions {prev_version} and {version}. "
+                        "Using highest version."
+                    )
                     # Compare versions as tuples of ints
                     prev_tuple = tuple(map(int, prev_version.split(".")))
                     new_tuple = tuple(map(int, version.split(".")))
                     if new_tuple > prev_tuple:
                         module_versions[module] = version
+                elif prev_version is not None and prev_version == version:
+                    continue
                 else:
                     module_versions.setdefault(module, version)
             else:
-                # If not matching '==', just keep the first occurrence
                 module_versions.setdefault(req, "")
-
-        # Write requirements with highest version
-        with open(file_path, "w", encoding="utf-8") as f:
-            for module, version in module_versions.items():
-                line = f"{module}=={version}\n" if version else f"{module}\n"
-                f.write(line)
-
-        # Prüfen, ob nach dem Filtern noch doppelte Module vorhanden sind
-        module_names = [
-            m.group(1)
-            for req in requirements if req.strip()
-            for m in [re.match(r"^([a-zA-Z0-9_\-]+)", req.strip())]
-            if m is not None
-        ]
-        duplicates = {
-            name for name in module_names if module_names.count(name) > 1}
-        if duplicates:
-            warnings.append(
-                f"Warning: Duplicate modules still found after filtering: {', '.join(sorted(duplicates))}")
-
-        return "\n".join(warnings) if warnings else ""
+        return module_versions, warnings
 
     def run(self) -> list[str]:
         """
@@ -157,12 +167,10 @@ class PipReqsAction:
         all_requirements: list[str] = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(
-                self.requirement_path, file_path)
+            requirements = self.generate_requirements(self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
-        warnings: str = self.save_requirements(
-            self.requirement_path, all_requirements)
+        warnings: str = self.save_requirements(self.requirement_path, all_requirements)
         for warning in warnings.split("\n"):
             print(f"::warning::{warning}")
         return all_requirements
