@@ -8,7 +8,7 @@ Contains:
 import importlib.metadata
 
 
-class Helper:  # pragma no cover
+class Helper:  # pragma no cover  # pylint: disable=too-few-public-methods
     """Class for helper methods such as version retrieval."""
 
     @staticmethod
