@@ -6,12 +6,16 @@ Contains the PipReqsAction class for generating requirements.txt files.
 """
 
 
+import contextlib
+import io
 import os
 import re
 import sys
 import typing
 
 from pipreqs import pipreqs  # type: ignore
+
+from github_action.libs.save_requirements_result import SaveRequirementsResult
 
 if typing.TYPE_CHECKING:  # pragma: no cover
     pass
@@ -79,7 +83,17 @@ class PipReqsAction:
             "--diff": None,
             "--clean": None,
         }
-        pipreqs.init(args)  # type: ignore
+        output_buffer = io.StringIO()
+        with (
+            contextlib.redirect_stdout(output_buffer),
+            contextlib.redirect_stderr(output_buffer),
+        ):
+            pipreqs.init(args)  # type: ignore
+        pipreqs_output = output_buffer.getvalue()
+        if pipreqs_output:  # pragma: no cover
+            # Only print debug output if pipreqs produced any output
+            # This avoids cluttering the logs with empty output
+            print(f"::debug::pipreqs output: {pipreqs_output}")
 
         try:
             with open(file_path, encoding="utf-8") as f:
@@ -87,7 +101,9 @@ class PipReqsAction:
         except FileNotFoundError as e:  # pragma: no cover
             raise FileNotFoundError(f"pipreqs throws exception: {e}") from e
 
-    def save_requirements(self, file_path: str, requirements: list[str]) -> str:
+    def save_requirements(
+        self, file_path: str, requirements: list[str]
+    ) -> SaveRequirementsResult:
         """
         Save requirements to a file, keeping only the highest version for each module.
         If duplicate modules with different versions are found, a warning is returned.
@@ -109,7 +125,11 @@ class PipReqsAction:
 
         self.__report_duplicate_modules(requirements, warnings)
 
-        return "\n".join(warnings) if warnings else ""
+        result: SaveRequirementsResult = {
+            "requirements": requirements,
+            "warnings": "\n".join(warnings) if warnings else "",
+        }
+        return result
 
     def __report_duplicate_modules(
         self, requirements: list[str], warnings: list[str]
@@ -119,7 +139,8 @@ class PipReqsAction:
             for req in requirements
             if req.strip() and (m := re.match(r"^([a-zA-Z0-9_\-]+)", req.strip()))
         ]
-        duplicates = {name for name in module_names if module_names.count(name) > 1}
+        duplicates = {
+            name for name in module_names if module_names.count(name) > 1}
         if duplicates:
             warnings.append(
                 "Warning: Duplicate modules still found after filtering:"
@@ -167,13 +188,17 @@ class PipReqsAction:
         all_requirements: list[str] = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(self.requirement_path, file_path)
+            requirements = self.generate_requirements(
+                self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
-        warnings: str = self.save_requirements(self.requirement_path, all_requirements)
-        for warning in warnings.split("\n"):
-            print(f"::warning::{warning}")
-        return all_requirements
+        final_requirements: SaveRequirementsResult = self.save_requirements(
+            self.requirement_path, all_requirements
+        )
+        for warning in final_requirements["warnings"].split("\n"):
+            if warning != "":
+                print(f"::warning::{warning}")
+        return final_requirements["requirements"]
 
     @staticmethod
     def get_argument(

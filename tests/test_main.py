@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from github_action.libs.save_requirements_result import SaveRequirementsResult
 from github_action.main import PipReqsAction
 
 
@@ -88,7 +89,9 @@ def test_save_requirements(tmp_path: Path) -> None:
     ]
 
     action = PipReqsAction(str(req_file), "dummy", False)
-    warning = action.save_requirements(str(req_file), requirements)
+    result: SaveRequirementsResult = action.save_requirements(
+        str(req_file), requirements
+    )
 
     assert req_file.exists()
     with open(req_file, encoding="utf-8") as f:
@@ -98,7 +101,8 @@ def test_save_requirements(tmp_path: Path) -> None:
     assert len(saved_reqs) == 3
     assert "requests==2.28.1\n" in saved_reqs
     assert "json==1.0.0\n" in saved_reqs
-    assert warning == ""
+    assert "pytest>=7.0.0\n" in saved_reqs
+    assert result["warnings"] == ""
 
 
 def test_save_requirements_duplicate_versions(tmp_path: Path) -> None:
@@ -113,7 +117,10 @@ def test_save_requirements_duplicate_versions(tmp_path: Path) -> None:
         "requests==2.28.1\n",
     ]
     action: PipReqsAction = PipReqsAction(str(req_file), "dummy", False)
-    warning: str = action.save_requirements(str(req_file), requirements)
+    result: SaveRequirementsResult = action.save_requirements(
+        str(req_file), requirements
+    )
+    warning = result["warnings"]
 
     assert req_file.exists()
 
@@ -145,10 +152,12 @@ def test_save_requirements_duplicate_modules(tmp_path: Path) -> None:
         "requests>=2.28.1\n",
     ]
     action = PipReqsAction(str(req_file), "dummy", False)
-    warning = action.save_requirements(str(req_file), requirements)
+    result: SaveRequirementsResult = action.save_requirements(
+        str(req_file), requirements
+    )
 
     assert req_file.exists()
-    assert warning.startswith(
+    assert result["warnings"].startswith(
         "Warning: Duplicate modules still found after filtering: requests"
     )
 
@@ -212,11 +221,11 @@ def test_run_prints_warning(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> 
 
     def fake_save_requirements(
         _self: object, _file_path: str, _requirements: list[str]
-    ) -> str:
+    ) -> SaveRequirementsResult:
         called["printed"] = False
         print("::warning::Test warning")
         called["printed"] = True
-        return "Test warning"
+        return {"requirements": [], "warnings": "Test warning"}
 
     monkeypatch.setattr(PipReqsAction, "save_requirements", fake_save_requirements)
     action = PipReqsAction(str(tmp_path / "requirements.txt"), str(tmp_path), False)
