@@ -93,7 +93,7 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.authors=J.F. Heinrich <jfheinrich@users.noreply.github.com>
             org.opencontainers.image.vendor=J.F. Heinrich
-            org.opencontainers.image.documentation=https://github.com/jfheinrich-eu/github-daily-report#readme
+            org.opencontainers.image.documentation=https://github.com/jfheinrich-eu/pipreqs-action#readme
             org.opencontainers.image.ref.name=${{ env.VERSION }}
             org.opencontainers.image.base.name=python:3.12.11-alpine3.22
 
