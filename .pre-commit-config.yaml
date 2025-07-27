@@ -1,31 +1,43 @@
 repos:
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
-    hooks:
-      - id: black
-        language_version: python3
-
   - repo: https://github.com/pycqa/isort
     rev: 6.0.1
     hooks:
       - id: isort
-        name: isort (python)
-        language_version: python3
-
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
   - repo: https://github.com/pycqa/flake8
-    rev: 7.2.0
+    rev: 7.3.0
     hooks:
       - id: flake8
-
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.20.0
     hooks:
       - id: pyupgrade
         args: [--py311-plus]
-
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.27.2
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 3.0.0
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/pylint-dev/pylint
+    rev: v3.3.7
+    hooks:
+      - id: pylint
+        name: pylint-main
+        language: system
+        files: ^src/
+      - id: pylint
+        name: pylint-tests
+        language: system
+        files: ^tests/

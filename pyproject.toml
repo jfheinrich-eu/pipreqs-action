@@ -9,10 +9,10 @@ authors = [{ name = "Joerg Heinrich", email = "joerg@jfheinrich.eu" }]
 readme = "README.md"
 requires-python = ">=3.12"
 dynamic = ["version"]
-dependencies = ["pipreqs==0.5.0", "GitPython==3.1.44"]
+dependencies = ["pipreqs==0.5.0"]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-cov", "flake8", "black", "isort", "pyupgrade"]
+dev = ["pytest", "pytest-cov", "flake8", "black", "isort", "pyupgrade", "pylint", "mypy", "pre-commit"]
 
 [tool.setuptools_scm]
 version_scheme = "post-release"
