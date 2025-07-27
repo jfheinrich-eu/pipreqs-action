@@ -21,5 +21,16 @@
         "run pytest testsuite": "cd ${workspaceFolder} && pytest --cov --cov-branch --cov-report term --cov-report xml:coverage/cov.xml --cov-report html:coverage/cov_html",
         "run HTTP server Coverage Report": "cd ${workspaceFolder} && python3 -m http.server 8888 --directory coverage/cov_html",
     },
-    "commentTranslate.targetLanguage": "en"
+    "commentTranslate.targetLanguage": "en",
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "notebook.defaultFormatter": "ms-python.black-formatter",
+    "python.languageServer": "Pylance",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "python.analysis.typeCheckingMode": "strict",
+    },
+    "python.analysis.inlayHints.callArgumentNames": "all",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.typeEvaluation.strictDictionaryInference": true,
+    "python.analysis.typeEvaluation.strictListInference": true,
+    "python.analysis.typeEvaluation.strictSetInference": true
 }
