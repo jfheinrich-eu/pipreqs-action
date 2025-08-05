@@ -61,7 +61,7 @@ jobs:
           PSONO_DOCKERHUB_REGISTRY_ID: ${{ secrets.PSONO_DOCKERHUB_REGISTRY_ID }}
 
       - name: Docker login
-        uses: docker/login-action@v3.4.0
+        uses: docker/login-action@v3.5.0
         with:
           username: ${{ steps.secret_whisperer.outputs.CI_REGISTRY_USER }}
           password: ${{ steps.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
