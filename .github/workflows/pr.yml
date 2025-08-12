@@ -17,7 +17,7 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
 
       - uses: tanmay-pathak/generate-pull-request-description@v1.0.0
         id: pr-description
@@ -58,7 +58,7 @@ jobs:
           secret_fields: "password"
           mask_secrets: password
 
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
 
       - uses: jefflinse/pr-semver-bump@v1.7.3
         name: Validate Pull Request Metadata
