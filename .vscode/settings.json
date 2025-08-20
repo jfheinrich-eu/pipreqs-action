@@ -18,7 +18,7 @@
     "command-runner.terminal.autoClear": true,
     "command-runner.terminal.autoFocus": true,
     "command-runner.commands": {
-        "run pytest testsuite": "cd ${workspaceFolder} && pytest --cov --cov-branch --cov-report term --cov-report xml:coverage/cov.xml --cov-report html:coverage/cov_html",
+        "run pytest testsuite": "cd ${workspaceFolder} && poetry poe test",
         "run HTTP server Coverage Report": "cd ${workspaceFolder} && python3 -m http.server 8888 --directory coverage/cov_html",
     },
     "commentTranslate.targetLanguage": "en",
@@ -40,6 +40,16 @@
     "python.formatting.blackPath": "black",
     "python.formatting.blackArgs": [
         "--line-length",
-        "88"
-    ]
+        "88",
+        "--exclude",
+        ".git",
+        "__pycache__",
+        "build",
+        "dist",
+        ".poetry",
+        "tests/test_app.py",
+        "--target-version",
+        "py312"
+    ],
+    "python-envs.pythonProjects": []
 }

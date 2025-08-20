@@ -12,7 +12,8 @@ from github_action.main import PipReqsAction
 # from typing import List
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Main function to execute the pipreqs action."""
     print(f"Version: {__version__}")
 
     requirement_path: str = PipReqsAction.get_argument(1, "INPUT_REQUIREMENT_PATH")
@@ -23,9 +24,13 @@ if __name__ == "__main__":
         print("Usage: python main.py <requirement_path> <project_path> <recursive>")
         sys.exit(1)
 
-    pipReqsAction = PipReqsAction(
+    pip_reqs_action = PipReqsAction(
         requirement_path, project_path, recursive.lower() == "true"
     )
 
-    requirements: list[str] = pipReqsAction.run()
+    requirements: list[str] = pip_reqs_action.run()
     print(requirements)
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()

@@ -1,28 +1,61 @@
-[build-system]
-requires = ["setuptools", "wheel", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "pipreqs-action"
-description = "Automatisierte Erstellung von requirements.txt für Python-Projekte mit GitHub Actions."
+version = "0.1.0"
+description = "Automated Creation of Requirements.txt for Python projects with Github Actions."
 authors = [{ name = "Joerg Heinrich", email = "joerg@jfheinrich.eu" }]
+license = { text = "MIT" }
 readme = "README.md"
-requires-python = ">=3.12"
-dynamic = ["version"]
-dependencies = ["pipreqs==0.5.0"]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pipreqs==0.5.0"
+]
 
-[project.optional-dependencies]
-dev = ["pytest", "pytest-cov", "flake8", "black", "isort", "pyupgrade", "pylint", "mypy", "pre-commit"]
+[project.scripts]
+pipreqs-action = "github_action.main:main"
 
-[tool.setuptools_scm]
-version_scheme = "post-release"
-local_scheme = "no-local-version"
+[project.urls]
+Homepage = "https://github.com/jfheinrich-eu/pipreqs-action"
+Repository = "https://github.com/jfheinrich-eu/pipreqs-action"
+Issues = "https://github.com/jfheinrich-eu/pipreqs-action/issues"
+Changelog = "https://github.com/jfheinrich-eu/pipreqs-action/blob/master/CHANGELOG.md"
+Logo = "https://raw.githubusercontent.com/jfheinrich-eu/pipreqs-action/master/assets/logo.png"
+
+[tool.poetry]
+packages = [{include = "github_action", from = "src"}]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.4.1"
+pytest-cov = "6.2.1"
+flake8 = "7.3.0"
+black = "25.1.0"
+isort = "6.0.1"
+pyupgrade = "3.20.0"
+pylint = "3.3.7"
+mypy = "1.17.0"
+pre-commit = "4.2.0"
+
+
+[tool.poetry.group.testonly.dependencies]
+requests = "^2.32.4"
+pandas = "^2.3.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project.entry-points."poetry.application.plugin"]
+export = "poetry_export.plugin:ExportPlugin"
+poethepoet = "poethepoet.plugin:PoePlugin"
+git_version = "poetry_git_version_plugin:GitVersionPlugin"
 
 [tool.pytest.ini_options]
-pythonpath = "src"
-testpaths = ["tests"]
+minversion = "8.0"
 addopts = [
     "--import-mode=importlib",
+    "--ignore=src/app.py",
+    "-ra",
+    "--tb=short",
+    "--strict-markers",
     "--cov",
     "--cov-branch",
     "--cov-report=term",
@@ -30,3 +63,74 @@ addopts = [
     "--cov-report=html:coverage/cov_html",
     "--cov-report=lcov:coverage/cov.info",
 ]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+pythonpath = ["src"]
+testpaths = ["tests"]
+norecursedirs = [".git", "__pycache__", "build", "dist", ".poetry", "node_modules", ".venv", "coverage"]
+log_cli = true
+log_cli_level = "ERROR"
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
+[[tool.poetry.source]]
+name = "pypi-public"
+url = "https://pypi.org/simple"
+
+[tool.flake8]
+max-line-length = 88
+inline-quotes = "double"
+exclude = [".git", "__pycache__", "build", "dist", ".poetry"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_glob = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".poetry",
+    "tests/test_app.py"
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+include = "\\.pyi?$"
+check = false
+exclude = '''
+/(\.git|__pycache__|build|dist|\.poetry|tests/test_app\.py)/
+'''
+
+[tool.poetry-git-version-plugin]
+release_type = "tag"
+
+[tool.poe.tasks]
+build = "poetry build"
+serve = "python -m http.server -d ./coverage/cov_html"
+requirements = "poetry export -f requirements.txt --without-hashes --all-groups -o requirements.txt"
+lint = "flake8 ."
+format_black = "black ."
+format_isort = "isort ."
+format = ["format_isort", "format_black"]
+
+[tool.poe.tasks.pre-commit]
+cmd = "pre-commit run --all-files"
+env = { POETRY_VIRTUALENVS_IN_PROJECT = "true", PYTHONPATH = "src" }
+
+[tool.poe.tasks.test]
+cmd = "pytest"
+env = { POETRY_VIRTUALENVS_IN_PROJECT = "true", PYTHONPATH = "src" }

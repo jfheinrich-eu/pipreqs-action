@@ -1,0 +1,43 @@
+name: Update Major Tag
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-major-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+
+      - name: Get GitHub.com Token
+        id: github_com_token
+        uses: ./.github/actions/secret_github_com_token
+        with:
+          PSONO_API_KEY_ID: ${{ secrets.PSONO_API_KEY_ID }}
+          PSONO_API_SECRET_KEY_HEX: ${{ secrets.PSONO_API_SECRET_KEY_HEX }}
+          PSONO_SERVER_URL: ${{ vars.PSONO_SERVER_URL }}
+          PSONO_GITHUB_COM_TOKEN_ID: ${{ secrets.PSONO_GITHUB_COM_TOKEN }}
+
+
+      - name: Set up Git user
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Move major tag to latest release
+        env:
+          GH_PAT: ${{ steps.github_com_token.outputs.GITHUB_COM_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          # Extract major tag (e.g. v4 from v4.4.1)
+          MAJOR_TAG=$(echo "$RELEASE_TAG" | grep -oE '^v[0-9]+')
+          if [ -n "$MAJOR_TAG" ]; then
+            git fetch --tags
+            git tag -f "$MAJOR_TAG" "$RELEASE_TAG"
+            git push https://x-access-token:${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git "$MAJOR_TAG" --force
+          else
+            echo "No valid major tag found. Release tag was: $RELEASE_TAG"
+            exit 1
+          fi
