@@ -14,7 +14,7 @@ jobs:
     outputs:
       VERSION: ${{ steps.set-version.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -49,7 +49,7 @@ jobs:
       PLATFORMS: "linux/arm64,linux/amd64"
       VERSION: ${{ needs.tests.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
 
       - name: Dockerhub Registry Secrets
         id: secret_whisperer
@@ -61,7 +61,7 @@ jobs:
           PSONO_DOCKERHUB_REGISTRY_ID: ${{ secrets.PSONO_DOCKERHUB_REGISTRY_ID }}
 
       - name: Docker login
-        uses: docker/login-action@v3.4.0
+        uses: docker/login-action@v3.5.0
         with:
           username: ${{ steps.secret_whisperer.outputs.CI_REGISTRY_USER }}
           password: ${{ steps.secret_whisperer.outputs.CI_REGISTRY_PASSWORD }}
@@ -111,7 +111,7 @@ jobs:
     needs: tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
 
       - uses: actions/setup-python@v5.6.0
         with:
@@ -137,12 +137,12 @@ jobs:
       - build_python_dist
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Download Python package artifacts
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v5.0.0
         with:
           name: python-dist
           path: dist/

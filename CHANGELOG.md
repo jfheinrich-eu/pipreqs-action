@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.4.0] - 2025-07-27
+### :sparkles: New Features
+- [`997f84d`](https://github.com/jfheinrich-eu/pipreqs-action/commit/997f84d2bfb0fa6b8a3e6b719651502c4ad1566f) - enhance save_requirements to handle duplicate modules and keep highest version *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`bc826df`](https://github.com/jfheinrich-eu/pipreqs-action/commit/bc826df8b0565cb5aa2c5d2875c661f916f337da) - update Dockerfile to use specific Python version and enhance build process with additional dependencies *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`dd16b9f`](https://github.com/jfheinrich-eu/pipreqs-action/commit/dd16b9fd388f40d59f2080ebca9870409ee2ad95) - update devcontainer configuration to include shellcheck and improve path handling *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`91e859f`](https://github.com/jfheinrich-eu/pipreqs-action/commit/91e859f90d0fb7c9cd7b83130d7a88773c5bf978) - update pre-commit configuration to include gitleaks and shellcheck, and upgrade flake8 version *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`3e52a3e`](https://github.com/jfheinrich-eu/pipreqs-action/commit/3e52a3eee1ffa9628e48327fb4d1fb17d7752b18) - update VSCode settings for improved Python development and formatting *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`571c76e`](https://github.com/jfheinrich-eu/pipreqs-action/commit/571c76ed86c82578bda653f3c8fac6652167a53c) - add pylint configuration to disable assignment-from-no-return warning *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`0755c73`](https://github.com/jfheinrich-eu/pipreqs-action/commit/0755c736aea8e937686f7dd5b6201530b12901c2) - enhance requirements handling by filtering duplicates and adding warnings *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`9790732`](https://github.com/jfheinrich-eu/pipreqs-action/commit/97907323e26822796e9d6348724866d336d64d29) - **requirements**: improve duplicate module handling, add type safety and tests *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :bug: Bug Fixes
+- [`0f15f0c`](https://github.com/jfheinrich-eu/pipreqs-action/commit/0f15f0c75d35a94f981b4e32764ebdf68933b44c) - correct YAML syntax and update platforms for Docker build *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`056737b`](https://github.com/jfheinrich-eu/pipreqs-action/commit/056737bfd49e9b466c546cf18f2f6f8af62bca86) - **docs**: update Docker image documentation link in release workflow *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+### :wrench: Chores
+- [`f6ae604`](https://github.com/jfheinrich-eu/pipreqs-action/commit/f6ae6042420dbd27d30e1384ddc2abdd243b236a) - sort and clean pyproject.toml sections for clarity and best practices *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`ed33985`](https://github.com/jfheinrich-eu/pipreqs-action/commit/ed33985efbd3fd448a408cc3d3fca8f56e8ca4a6) - **lint**: update pylint configuration for project conventions *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`2d9637e`](https://github.com/jfheinrich-eu/pipreqs-action/commit/2d9637ed1adc1ea717f4aa9685951cb354c0ce78) - remove redundant docstring from main entry point and update helper class comment *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`9e2ee75`](https://github.com/jfheinrich-eu/pipreqs-action/commit/9e2ee75de6cae7b780aee952ebdb0e9fb3ee5bd0) - **project**: update pyproject.toml for improved structure and *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`ac68143`](https://github.com/jfheinrich-eu/pipreqs-action/commit/ac681435cf62c96745b878d5615fabff659559c9) - **vscode**: update VSCode settings for enhanced Python formatting and analysis *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+- [`2e1a787`](https://github.com/jfheinrich-eu/pipreqs-action/commit/2e1a7875cddfab97f18051879d168f96b614e314) - **requirements**: remove GitPython dependency from requirements *(commit by [@jfheinrich](https://github.com/jfheinrich))*
+
+
 ## [v4.3.2] - 2025-07-13
 ### :bug: Bug Fixes
 - [`c70b01d`](https://github.com/jfheinrich-eu/pipreqs-action/commit/c70b01d9bc8db4a6b66f3303fd10a5615e1bafa0) - sanitize docker image tag names *(commit by [@jfheinrich](https://github.com/jfheinrich))*
@@ -157,3 +181,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v4.3.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.2.7...v4.3.0
 [v4.3.1]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.3.0...v4.3.1
 [v4.3.2]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.3.1...v4.3.2
+[v4.4.0]: https://github.com/jfheinrich-eu/pipreqs-action/compare/v4.3.2...v4.4.0
