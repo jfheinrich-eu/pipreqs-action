@@ -98,10 +98,10 @@ def test_save_requirements_with_duplicates(tmp_path):
     # Arrange
     project_path = tmp_path / "test_project"
     project_path.mkdir()
-    
+
     # Act
     result = main.save_requirements(str(project_path))
-    
+
     # Assert
     assert result.success is True
     assert len(result.warnings) > 0

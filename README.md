@@ -31,14 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Generate Requirements
         uses: jfheinrich-eu/pipreqs-action@a1b2c3d4e5f6789012345678901234567890abcd  # Pin to SHA for security
         with:
           PROJECT_PATH: src
           REQUIREMENT_PATH: requirements.txt
           RECURSIVE: 'true'
-          
+
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

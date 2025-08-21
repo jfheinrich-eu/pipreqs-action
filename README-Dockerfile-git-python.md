@@ -110,15 +110,15 @@ This image is provided under the MIT License.
 
 **Included Software Licenses:**
 - Git: GNU General Public License v2.0
-- Python: Python Software Foundation License  
+- Python: Python Software Foundation License
 - Alpine Linux: Various open source licenses
 
 ---
 
 ## Support & Maintenance
 
-**Maintainer:** Jörg Heinrich  
-**Email:** [joerg@jfheinrich.eu](mailto:joerg@jfheinrich.eu)  
+**Maintainer:** Jörg Heinrich
+**Email:** [joerg@jfheinrich.eu](mailto:joerg@jfheinrich.eu)
 **GitHub:** [jfheinrich-eu/pipreqs-action](https://github.com/jfheinrich-eu/pipreqs-action)
 
 ### Issues & Feature Requests
