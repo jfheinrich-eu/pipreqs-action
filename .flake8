@@ -1,3 +1,5 @@
 [flake8]
 extend-ignore = E501
+max-line-length = 88
 inline-quotes = double
+exclude = .git,__pycache__,build,dist,.poetry

@@ -4,16 +4,11 @@
 
 (gh auth status || gh auth login) && gh extension install https://github.com/nektos/gh-act
 
-(python -m pip install -user pip)
-(cd src && pip3 install --user pipreqs pytest pytest-cov flake8 auto8 )
-(python3 -m pip install --user pre-commit && pre-commit --version)
-# missing dependencis for pre-commit configuration black, isort, pyupgrade
-(python3 -m pip install --user black isort pyupgrade)
-(python3 -m pip install --user setuptools-scm)
-(python3 -m pip install --user .[dev])
-#(python -m pip install poetry)
-#(poetry install --with dev)
-
+(python -m pip install poetry && \
+    poetry install --all-groups --no-root && \
+    poetry self add poetry-plugin-export && \
+    poetry self add 'poethepoet[poetry_plugin]' && \
+    poetry self add poetry_git_version_plugin )
 
 npm ci
 

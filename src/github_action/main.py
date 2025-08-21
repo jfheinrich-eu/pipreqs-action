@@ -139,8 +139,7 @@ class PipReqsAction:
             for req in requirements
             if req.strip() and (m := re.match(r"^([a-zA-Z0-9_\-]+)", req.strip()))
         ]
-        duplicates = {
-            name for name in module_names if module_names.count(name) > 1}
+        duplicates = {name for name in module_names if module_names.count(name) > 1}
         if duplicates:
             warnings.append(
                 "Warning: Duplicate modules still found after filtering:"
@@ -188,15 +187,14 @@ class PipReqsAction:
         all_requirements: list[str] = []
 
         for file_path in python_files:
-            requirements = self.generate_requirements(
-                self.requirement_path, file_path)
+            requirements = self.generate_requirements(self.requirement_path, file_path)
             all_requirements.extend(requirements)
 
         final_requirements: SaveRequirementsResult = self.save_requirements(
             self.requirement_path, all_requirements
         )
         for warning in final_requirements["warnings"].split("\n"):
-            if warning != "":
+            if warning != "":  # pragma: no cover
                 print(f"::warning::{warning}")
         return final_requirements["requirements"]
 

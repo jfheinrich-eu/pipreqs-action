@@ -1,6 +1,6 @@
-name: "Automatic requirements.txt for Python Projects"
-description: "This action will automatically create the requirements.txt file for a python project using the pipreqs tool."
-author: "Ryan Rozario, Joerg Heinrich"
+name: "Generate Python Requirements.txt"
+description: "Automatically generates requirements.txt file for Python projects using pipreqs with enhanced duplicate handling and GitHub Actions integration."
+author: "Joerg Heinrich"
 
 inputs:
   PROJECT_PATH:
