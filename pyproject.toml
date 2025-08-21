@@ -43,7 +43,7 @@ pandas = "^2.3.1"
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[project.entry-points."poetry.application.plugin"]
+[tool.poetry.plugins."poetry.application.plugin"]
 export = "poetry_export.plugin:ExportPlugin"
 poethepoet = "poethepoet.plugin:PoePlugin"
 git_version = "poetry_git_version_plugin:GitVersionPlugin"
