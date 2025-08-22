@@ -7,6 +7,7 @@ import os
 def test_action_yml_description_length():
     """Test that action.yml description meets GitHub Marketplace requirements."""
     action_yml_path = os.path.join(os.path.dirname(__file__), '..', 'action.yml')
+    MAX_DESCRIPTION_LENGTH = os.getenv('MAX_DESCRIPTION_LENGTH', 125)
 
     with open(action_yml_path, 'r', encoding='utf-8') as f:
         action_config = yaml.safe_load(f)
