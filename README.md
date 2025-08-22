@@ -2,8 +2,10 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/jfheinrich-eu/pipreqs-action)](https://github.com/jfheinrich-eu/pipreqs-action/releases)
 [![GitHub marketplace](https://img.shields.io/badge/marketplace-generate--python--requirements-blue?logo=github)](https://github.com/marketplace/actions/generate-python-requirements-txt)
-[![Test Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)](https://github.com/jfheinrich-eu/pipreqs-action)
+[![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/jfheinrich-eu/pipreqs-action)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**🚀 Available on [GitHub Actions Marketplace](https://github.com/marketplace/actions/generate-python-requirements-txt)**
 
 > **Note**: This project is a fork and enhancement of [ryan-rozario/pipreqs-action](https://github.com/ryan-rozario/pipreqs-action) with significant improvements and additional features.
 
@@ -15,7 +17,7 @@ Automatically generates `requirements.txt` files for Python projects using [pipr
 - 🔍 **Recursive Scanning**: Optional recursive directory scanning
 - ⚡ **Duplicate Handling**: Intelligent handling of duplicate packages with different versions
 - ⚠️ **GitHub Warnings**: Automatic warnings in GitHub Actions logs for conflicts
-- 🧪 **Comprehensive Testing**: 98% test coverage with robust error handling
+- 🧪 **Comprehensive Testing**: 100% test coverage with robust error handling
 - 🐳 **Docker Support**: Containerized execution for consistent environments
 - 📊 **Detailed Logging**: Enhanced logging for debugging and monitoring
 
@@ -30,14 +32,14 @@ jobs:
   requirements:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Generate Requirements
-        uses: jfheinrich-eu/pipreqs-action@a1b2c3d4e5f6789012345678901234567890abcd  # Pin to SHA for security
+        uses: jfheinrich-eu/pipreqs-action@v4.4.2  # Use latest stable version
         with:
-          PROJECT_PATH: src
-          REQUIREMENT_PATH: requirements.txt
-          RECURSIVE: 'true'
+          PROJECT_PATH: "."
+          REQUIREMENT_PATH: "requirements.txt"
+          RECURSIVE: "true"
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -189,6 +191,32 @@ monorepo/
 │   └── requirements.txt # Generated: celery, redis
 └── .github/workflows/requirements.yml
 ```
+
+## 🎯 GitHub Actions Marketplace
+
+This action is available on the [GitHub Actions Marketplace](https://github.com/marketplace/actions/generate-python-requirements-txt). It falls under the following categories:
+
+### 📦 **Dependency Management**
+- Automatically analyzes Python projects for dependencies
+- Generates clean, deduplicated requirements.txt files
+- Handles version conflicts intelligently
+
+### 🔧 **Continuous Integration**
+- Integrates seamlessly with GitHub Actions workflows
+- Provides detailed logging and error reporting
+- Supports various project structures and layouts
+
+### 🐍 **Python Development**
+- Specialized for Python ecosystem
+- Works with all major Python package managers
+- Supports both standard library and third-party packages
+
+### 💡 **Usage Tips for Marketplace Users**
+
+1. **Version Pinning**: Always use a specific version tag (e.g., `@v4.4.2`) for production workflows
+2. **Security**: Consider pinning to a specific commit SHA for maximum security
+3. **Testing**: Test the action in a feature branch before deploying to main workflows
+4. **Monitoring**: Enable GitHub Actions notifications to stay informed about workflow runs
 
 ## 🤝 Contributing
 
