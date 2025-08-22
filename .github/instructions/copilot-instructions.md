@@ -13,7 +13,7 @@
 ## Architecture & Data Flow
 
 - **Entry Point:** Workflows call the action via `action.yml`, which invokes the Python entry point.
-- **Requirements Generation:** 
+- **Requirements Generation:**
   - Scans project files (recursive or non-recursive).
   - Uses pipreqs to infer dependencies.
   - Deduplicates modules, selects highest version, and emits GitHub warnings for conflicts.
