@@ -62,7 +62,7 @@ WORKDIR /project
 RUN chmod 755 /app/app.py && \
     pip install poetry && \
     poetry self add poetry-plugin-export && \
-    poetry export --whithout-hashes --format requirements.txt -o /app/requirements.txt && \
+    poetry export --format requirements.txt -o /app/requirements.txt && \
     pip install --no-cache-dir --target /app -r /app/requirements.txt
 WORKDIR /app
 RUN find . -name "*.pyc" -delete && \
