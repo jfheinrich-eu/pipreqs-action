@@ -1,5 +1,5 @@
 name: "Generate Python Requirements.txt"
-description: "Automatically generates requirements.txt file for Python projects using pipreqs with enhanced duplicate handling and GitHub Actions integration."
+description: "Generate requirements.txt files for Python projects with pipreqs"
 author: "Joerg Heinrich"
 
 inputs:
