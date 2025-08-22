@@ -1,6 +1,9 @@
-name: Template Sync
-on:
-    push
+# WARNING: This workflow is temporarily disabled due to a security alert (see https://github.com/jfheinrich-eu/pipreqs-action/security/dependabot/1)
+# To re-enable, uncomment the 'on:' section below.
+# When re-enabled, the workflow will print a reminder to verify the security alert is resolved.
+
+# on:
+#     push
 permissions:
     contents: write
     pull-requests: write
@@ -9,6 +12,10 @@ jobs:
     template-sync:
         runs-on: ubuntu-latest
         steps:
+            - name: Security Alert Reminder
+              run: |
+                echo "::warning::Check that the security alert #1 is resolved before using this workflow!"
+
             - name: Checkout
               uses: actions/checkout@v5
 
