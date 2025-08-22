@@ -1,20 +1,20 @@
 name: "Generate Python Requirements.txt"
-description: "Generate requirements.txt files for Python projects with pipreqs"
+description: "Automatically generate requirements.txt for Python projects using pipreqs with smart duplicate handling"
 author: "Joerg Heinrich"
 
 inputs:
   PROJECT_PATH:
-    description: "Gives the path of the project"
+    description: "Path to the Python project directory to scan for dependencies"
     required: true
     default: "/github/workspace"
 
   REQUIREMENT_PATH:
-    description: "Folder where requirements.txt has to be saved in"
+    description: "Output path where requirements.txt file should be saved (including filename)"
     required: true
     default: "/github/workspace/requirements.txt"
 
   RECURSIVE:
-    description: "Collect the requirements recursively, ['true'|'false']; default: 'true'"
+    description: "Scan directories recursively for Python files. Set to 'true' or 'false'"
     required: true
     default: "true"
 
@@ -23,5 +23,5 @@ runs:
   image: "Dockerfile"
 
 branding:
-  icon: "code"
-  color: "yellow"
+  icon: "package"
+  color: "blue"

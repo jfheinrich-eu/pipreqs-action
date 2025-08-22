@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v4.4.3] - 2025-08-22
+### :sparkles: New Features
+- **marketplace**: optimize action.yml for GitHub Marketplace publishing
+- **branding**: update icon to "package" and color to "blue" for better marketplace visibility
+- **docs**: improve input descriptions for better developer experience
+
+### :wrench: Chores
+- **marketplace**: prepare action for GitHub Actions Marketplace publication
+
 ## [v4.4.0] - 2025-07-27
 ### :sparkles: New Features
 - [`997f84d`](https://github.com/jfheinrich-eu/pipreqs-action/commit/997f84d2bfb0fa6b8a3e6b719651502c4ad1566f) - enhance save_requirements to handle duplicate modules and keep highest version *(commit by [@jfheinrich](https://github.com/jfheinrich))*
