@@ -15,7 +15,7 @@ def test_action_yml_description_length():
 
     # GitHub Marketplace typically recommends descriptions under 125 characters
     # for better display and SEO
-    assert len(description) <= 125, f"Description is {len(description)} characters, should be <= 125"
+    assert len(description) <= MAX_DESCRIPTION_LENGTH, f"Description is {len(description)} characters, should be <= {MAX_DESCRIPTION_LENGTH}"
 
     # Ensure description is not empty
     assert len(description) > 0, "Description should not be empty"
