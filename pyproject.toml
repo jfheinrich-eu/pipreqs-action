@@ -129,6 +129,7 @@ format_isort = "isort src"
 format_tests_black = "black tests"
 format_tests_isort = "isort tests"
 format = ["format_isort", "format_black","format_tests_isort", "format_tests_black"]
+reset_venv = { cmd = "bash scripts/reset-poetry-venv" }
 
 [tool.poe.tasks.pre-commit]
 cmd = "pre-commit run --all-files"

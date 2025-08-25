@@ -151,6 +151,41 @@ poetry poe lint
 poetry poe format
 ```
 
+### Poetry Environment Management
+
+The repository includes a robust script for managing Poetry virtual environments, which helps maintain a consistent development environment.
+
+```bash
+# Run with Poetry Exec
+poetry poe reset_venv
+
+# Or directly from scripts folder
+./scripts/reset-poetry-venv
+```
+
+Available options:
+
+```
+Options:
+  -h, --help                 Show this help message
+  -r, --reset                Completely reset the environment (includes cache and config)
+  -u, --update               Update the existing environment (default)
+  -n, --new                  Create a new environment
+  -p, --python VERSION       Specify Python version (e.g., 3.12)
+  -d, --delete-venv          Delete the virtual environment only
+  -c, --clear-cache          Clear Poetry cache
+  -g, --clear-config         Clear Poetry configuration
+  -i, --install-poetry       Reinstall Poetry
+  -v, --verbose              Enable verbose output
+
+Examples:
+  ./scripts/reset-poetry-venv --reset                 # Complete reset
+  ./scripts/reset-poetry-venv --update                # Update dependencies
+  ./scripts/reset-poetry-venv --new --python 3.12     # Create with Python 3.12
+```
+
+When run without parameters, the script enters interactive mode with a menu of options. The script automatically configures VS Code to use the Poetry virtual environment.
+
 ### Testing
 
 ```bash
