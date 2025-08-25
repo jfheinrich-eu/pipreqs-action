@@ -11,7 +11,13 @@ dependencies = [
 ]
 
 [project.scripts]
-pipreqs-action = "github_action.main:main"
+pipreqs-action = "github_action.main:cli"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project.urls]
 Homepage = "https://github.com/jfheinrich-eu/pipreqs-action"
@@ -38,15 +44,13 @@ pre-commit = "4.3.0"
 [tool.poetry.group.testonly.dependencies]
 requests = "^2.32.4"
 pandas = "^2.3.2"
+pyyaml = "^6.0.2"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry.plugins."poetry.application.plugin"]
-export = "poetry_export.plugin:ExportPlugin"
-poethepoet = "poethepoet.plugin:PoePlugin"
-git_version = "poetry_git_version_plugin:GitVersionPlugin"
+[project.entry-points."poetry.application.plugin"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
@@ -114,9 +118,6 @@ check = false
 exclude = '''
 /(\.git|__pycache__|build|dist|\.poetry|tests/test_app\.py)/
 '''
-
-[tool.poetry-git-version-plugin]
-release_type = "tag"
 
 [tool.poe.tasks]
 build = "poetry build"

@@ -106,3 +106,4 @@ venv.bak/
 # Node.js
 node_modules
 coverage/
+.ghtoken

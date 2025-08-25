@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Deaktiviere die aktuelle Umgebung
+deactivate
+
+# Lösche die lokale virtuelle Umgebung
+rm -rf .venv
+
+# Lösche den Poetry-Cache 
+rm -rf "$HOME"/.cache/pypoetry
+
+# Optional: Lösche den Poetry-Konfigurationsordner
+rm -rf "$HOME"/.config/pypoetry
+
+# Neu installieren (falls nötig)
+# curl -sSL https://install.python-poetry.org | python3 -
+
+# Neue Umgebung erstellen
+poetry install

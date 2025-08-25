@@ -17,14 +17,14 @@ This document outlines the steps to publish the pipreqs-action to the GitHub Act
 - [x] **Name**: "Generate Python Requirements.txt"
 - [x] **Description**: "Automatically generate requirements.txt for Python projects using pipreqs with smart duplicate handling"
 - [x] **Author**: "Joerg Heinrich"
-- [x] **Branding**: 
+- [x] **Branding**:
   - Icon: `package` (appropriate for dependency management)
   - Color: `blue` (professional and visible)
 
 ### ✅ Categories
 This action fits into these marketplace categories:
 - **Dependency Management** (Primary)
-- **Continuous Integration** 
+- **Continuous Integration**
 - **Code Quality**
 - **Python Development**
 
@@ -75,7 +75,7 @@ The action can be published to the marketplace in two ways:
 1. Go to the [Releases page](https://github.com/jfheinrich-eu/pipreqs-action/releases)
 2. Find release v4.4.2 (or create a new release)
 3. Edit the release
-4. Check "Publish this Action to the GitHub Marketplace" 
+4. Check "Publish this Action to the GitHub Marketplace"
 5. Select appropriate categories:
    - Primary: "Dependency management"
    - Secondary: "Continuous integration"

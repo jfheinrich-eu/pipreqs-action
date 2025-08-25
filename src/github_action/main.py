@@ -15,6 +15,7 @@ import typing
 
 from pipreqs import pipreqs  # type: ignore
 
+from github_action import __version__
 from github_action.libs.save_requirements_result import SaveRequirementsResult
 
 if typing.TYPE_CHECKING:  # pragma: no cover
@@ -219,3 +220,25 @@ class PipReqsAction:
 
         value = os.getenv(env_name) if env_name is not None else ""
         return value if value is not None else ""
+
+
+def cli() -> None:
+    """
+    Command-line interface for the application.
+    """
+    print(f"Version: {__version__}")
+
+    requirement_path: str = PipReqsAction.get_argument(1, "INPUT_REQUIREMENT_PATH")
+    project_path: str = PipReqsAction.get_argument(2, "INPUT_PROJECT_PATH")
+    recursive: str = PipReqsAction.get_argument(3, "INPUT_RECURSIVE")
+
+    if not requirement_path or not project_path or not recursive:
+        print("Usage: python main.py <requirement_path> <project_path> <recursive>")
+        sys.exit(1)
+
+    pip_reqs_action = PipReqsAction(
+        requirement_path, project_path, recursive.lower() == "true"
+    )
+
+    requirements: list[str] = pip_reqs_action.run()
+    print(requirements)
