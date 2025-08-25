@@ -124,9 +124,11 @@ build = "poetry build"
 serve = "python -m http.server -d ./coverage/cov_html"
 requirements = "poetry export -f requirements.txt --without-hashes --all-groups -o requirements.txt"
 lint = "flake8 ."
-format_black = "black ."
-format_isort = "isort ."
-format = ["format_isort", "format_black"]
+format_black = "black src"
+format_isort = "isort src"
+format_tests_black = "black tests"
+format_tests_isort = "isort tests"
+format = ["format_isort", "format_black","format_tests_isort", "format_tests_black"]
 
 [tool.poe.tasks.pre-commit]
 cmd = "pre-commit run --all-files"

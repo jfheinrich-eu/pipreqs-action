@@ -6,7 +6,7 @@ deactivate
 # Lösche die lokale virtuelle Umgebung
 rm -rf .venv
 
-# Lösche den Poetry-Cache 
+# Lösche den Poetry-Cache
 rm -rf "$HOME"/.cache/pypoetry
 
 # Optional: Lösche den Poetry-Konfigurationsordner
