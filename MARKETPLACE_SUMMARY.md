@@ -8,7 +8,7 @@ The pipreqs-action has been successfully prepared for GitHub Actions Marketplace
 
 ### action.yml Enhancements
 - **Description**: Enhanced from generic to specific marketplace-friendly description
-- **Input Descriptions**: Improved clarity and developer experience  
+- **Input Descriptions**: Improved clarity and developer experience
 - **Branding Icon**: Changed from "code" to "package" (more relevant for dependency management)
 - **Branding Color**: Changed from "yellow" to "blue" (more professional and visible)
 
@@ -29,7 +29,7 @@ The pipreqs-action has been successfully prepared for GitHub Actions Marketplace
 ### Primary Category
 **Dependency Management** - Perfect fit for requirements.txt generation
 
-### Secondary Categories  
+### Secondary Categories
 - **Continuous Integration** - Automates CI/CD workflows
 - **Code Quality** - Maintains clean dependency files
 - **Utilities** - Useful Python development tool
@@ -40,7 +40,7 @@ The pipreqs-action has been successfully prepared for GitHub Actions Marketplace
 1. **Go to**: https://github.com/jfheinrich-eu/pipreqs-action/releases
 2. **Find**: Release v4.4.2 (or create v4.4.3 with latest changes)
 3. **Edit Release**: Check "Publish this Action to the GitHub Marketplace"
-4. **Select Categories**: 
+4. **Select Categories**:
    - Primary: "Dependency management"
    - Secondary: "Continuous integration"
 5. **Submit**: For marketplace review
@@ -67,7 +67,7 @@ The pipreqs-action has been successfully prepared for GitHub Actions Marketplace
 
 ## 🔍 Marketplace SEO Keywords
 ```
-python, requirements, dependencies, pipreqs, automation, ci-cd, 
+python, requirements, dependencies, pipreqs, automation, ci-cd,
 package-management, devops, dependency-management, continuous-integration
 ```
 
@@ -83,7 +83,7 @@ Automatically generate requirements.txt for Python projects with smart duplicate
 This GitHub Action automatically generates requirements.txt files for Python projects using pipreqs with enhanced features:
 
 🔄 Smart Analysis: Analyzes Python imports to determine actual dependencies
-⚡ Duplicate Handling: Intelligently resolves duplicate packages with different versions  
+⚡ Duplicate Handling: Intelligently resolves duplicate packages with different versions
 🔍 Recursive Scanning: Optional deep scanning of project directories
 ⚠️ GitHub Integration: Provides warnings in Actions logs for version conflicts
 🧪 Battle Tested: 100% test coverage with comprehensive error handling

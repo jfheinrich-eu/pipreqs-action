@@ -1,0 +1,317 @@
+#!/usr/bin/env bash
+#
+# Poetry Virtual Environment Management Script
+# -------------------------------------------
+# This script helps manage Poetry virtual environments with various options
+# for resetting, updating, or creating new environments with specific Python versions.
+#
+# Author: Joerg Heinrich
+# License: MIT
+
+set -e  # Exit immediately if a command exits with a non-zero status
+
+# Default values
+PYTHON_VERSION=""
+OPERATION="update"
+VERBOSE=false
+REMOVE_CACHE=false
+REMOVE_CONFIG=false
+DELETE_VENV=false
+INSTALL_POETRY=false
+VENV_PATH=".venv"
+COLOR_GREEN="\033[0;32m"
+COLOR_YELLOW="\033[0;33m"
+COLOR_RED="\033[0;31m"
+COLOR_RESET="\033[0m"
+COLOR_BLUE="\033[0;34m"
+
+# Function to display help message
+show_help() {
+    echo -e "${COLOR_BLUE}Poetry Virtual Environment Management Tool${COLOR_RESET}"
+    echo
+    echo "Usage: $0 [options]"
+    echo
+    echo "Options:"
+    echo "  -h, --help                 Show this help message"
+    echo "  -r, --reset                Completely reset the environment (includes cache and config)"
+    echo "  -u, --update               Update the existing environment (default)"
+    echo "  -n, --new                  Create a new environment"
+    echo "  -p, --python VERSION       Specify Python version (e.g., 3.12)"
+    echo "  -d, --delete-venv          Delete the virtual environment only"
+    echo "  -c, --clear-cache          Clear Poetry cache"
+    echo "  -g, --clear-config         Clear Poetry configuration"
+    echo "  -i, --install-poetry       Reinstall Poetry"
+    echo "  -v, --verbose              Enable verbose output"
+    echo
+    echo "Examples:"
+    echo "  $0 --reset                 # Complete reset including cache and config"
+    echo "  $0 --update                # Update dependencies in existing environment"
+    echo "  $0 --new --python 3.12     # Create new environment with Python 3.12"
+    echo "  $0 --delete-venv           # Only delete the virtual environment"
+}
+
+# Function to print messages
+print_message() {
+    local level=$1
+    local message=$2
+
+    case $level in
+        "info")
+            echo -e "${COLOR_GREEN}[INFO]${COLOR_RESET} $message"
+            ;;
+        "warn")
+            echo -e "${COLOR_YELLOW}[WARNING]${COLOR_RESET} $message"
+            ;;
+        "error")
+            echo -e "${COLOR_RED}[ERROR]${COLOR_RESET} $message"
+            ;;
+        "debug")
+            if [[ "$VERBOSE" == "true" ]]; then
+                echo -e "${COLOR_BLUE}[DEBUG]${COLOR_RESET} $message"
+            fi
+            ;;
+    esac
+}
+
+# Function to verify Python version
+verify_python_version() {
+    local version=$1
+
+    print_message "debug" "Checking Python version $version availability..."
+    if command -v "python$version" &>/dev/null; then
+        print_message "debug" "Found python$version command"
+        return 0
+    else
+        print_message "debug" "python$version command not found, checking current Python version"
+        python3 -c "import sys; exit(0 if sys.version_info >= (${version/./, }) else 1)" 2>/dev/null
+        return $?
+    fi
+}
+
+# Function to safely deactivate virtual environment
+safe_deactivate() {
+    # Check if we're in a virtual environment
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        print_message "info" "Deactivating current virtual environment..."
+        deactivate 2>/dev/null || true
+    fi
+}
+
+# Function to delete virtual environment
+delete_venv() {
+    if [[ -d "$VENV_PATH" ]]; then
+        print_message "info" "Removing virtual environment at $VENV_PATH..."
+        rm -rf "$VENV_PATH"
+    else
+        print_message "warn" "No virtual environment found at $VENV_PATH"
+    fi
+}
+
+# Function to clear Poetry cache
+clear_cache() {
+    print_message "info" "Clearing Poetry cache..."
+    rm -rf "$HOME/.cache/pypoetry"
+}
+
+# Function to clear Poetry configuration
+clear_config() {
+    print_message "info" "Clearing Poetry configuration..."
+    rm -rf "$HOME/.config/pypoetry"
+}
+
+# Function to reinstall Poetry
+reinstall_poetry() {
+    print_message "info" "Reinstalling Poetry..."
+    curl -sSL https://install.python-poetry.org | python3 -
+}
+
+# Function to create or update environment
+setup_environment() {
+    local cmd="poetry install"
+
+    if [[ -n "$PYTHON_VERSION" ]]; then
+        # Check if specified Python version is available
+        if verify_python_version "$PYTHON_VERSION"; then
+            cmd="poetry env use python$PYTHON_VERSION && $cmd"
+            print_message "info" "Using Python $PYTHON_VERSION for virtual environment"
+        else
+            print_message "error" "Python $PYTHON_VERSION is not available. Please install it first."
+            exit 1
+        fi
+    fi
+
+    print_message "info" "Setting up Poetry environment..."
+    print_message "debug" "Executing command: $cmd"
+    eval "$cmd"
+
+    # Configure VS Code to use this environment
+    if [[ ! -d ".vscode" ]]; then
+        print_message "debug" "Creating .vscode directory"
+        mkdir -p ".vscode"
+    fi
+
+    # Get the actual Python path in the virtual environment
+    local venv_python_path
+    venv_python_path=$(poetry env info -p 2>/dev/null)/bin/python
+    print_message "debug" "Virtual environment Python path: $venv_python_path"
+
+    if [[ -f "$venv_python_path" ]]; then
+        print_message "info" "Configuring VS Code to use Poetry's virtual environment..."
+
+        # Create or update settings.json for VS Code
+        if [[ ! -f ".vscode/settings.json" ]]; then
+            print_message "debug" "Creating new .vscode/settings.json file"
+            echo '{
+  "python.defaultInterpreterPath": "'"$venv_python_path"'",
+  "python.terminal.activateEnvironment": true
+}' > .vscode/settings.json
+        else
+            print_message "debug" "Updating existing .vscode/settings.json file"
+            # Use temporary file to update settings.json
+            tmp_file=$(mktemp)
+            jq --arg path "$venv_python_path" '.["python.defaultInterpreterPath"] = $path | .["python.terminal.activateEnvironment"] = true' .vscode/settings.json > "$tmp_file" 2>/dev/null || {
+                # If jq fails or isn't installed, create a new settings file
+                print_message "debug" "jq failed, creating new settings file"
+                echo '{
+  "python.defaultInterpreterPath": "'"$venv_python_path"'",
+  "python.terminal.activateEnvironment": true
+}' > "$tmp_file"
+            }
+            mv "$tmp_file" .vscode/settings.json
+        fi
+    else
+        print_message "warn" "Could not find Python in the virtual environment"
+    fi
+}
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -r|--reset)
+            OPERATION="reset"
+            DELETE_VENV=true
+            REMOVE_CACHE=true
+            REMOVE_CONFIG=true
+            shift
+            ;;
+        -u|--update)
+            OPERATION="update"
+            shift
+            ;;
+        -n|--new)
+            OPERATION="new"
+            DELETE_VENV=true
+            shift
+            ;;
+        -p|--python)
+            PYTHON_VERSION="$2"
+            shift 2
+            ;;
+        -d|--delete-venv)
+            DELETE_VENV=true
+            shift
+            ;;
+        -c|--clear-cache)
+            REMOVE_CACHE=true
+            shift
+            ;;
+        -g|--clear-config)
+            REMOVE_CONFIG=true
+            shift
+            ;;
+        -i|--install-poetry)
+            INSTALL_POETRY=true
+            shift
+            ;;
+        -v|--verbose)
+            # Enable verbose mode for future use
+            export VERBOSE=true
+            shift
+            ;;
+        *)
+            print_message "error" "Unknown option: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+# Interactive mode if no parameters provided
+if [[ "$OPERATION" == "update" && "$DELETE_VENV" == "false" && "$REMOVE_CACHE" == "false" &&
+      "$REMOVE_CONFIG" == "false" && "$INSTALL_POETRY" == "false" && -z "$PYTHON_VERSION" ]]; then
+    echo -e "${COLOR_BLUE}Poetry Virtual Environment Management${COLOR_RESET}"
+    echo
+    PS3="Select an operation: "
+    options=("Update environment" "Reset environment" "Create new environment" "Delete virtual environment only" "Quit")
+    # shellcheck disable=SC2034
+    select opt in "${options[@]}"; do
+        case $REPLY in
+            1)
+                OPERATION="update"
+                break
+                ;;
+            2)
+                OPERATION="reset"
+                DELETE_VENV=true
+                REMOVE_CACHE=true
+                REMOVE_CONFIG=true
+                break
+                ;;
+            3)
+                OPERATION="new"
+                DELETE_VENV=true
+                read -r -p "Specify Python version (e.g., 3.12) or leave empty for default: " PYTHON_VERSION
+                break
+                ;;
+            4)
+                DELETE_VENV=true
+                break
+                ;;
+            5)
+                echo "Exiting without changes"
+                exit 0
+                ;;
+            *)
+                echo "Invalid option"
+                ;;
+        esac
+    done
+fi
+
+# Main execution flow
+print_message "info" "Starting operation: $OPERATION"
+
+# Always deactivate first
+safe_deactivate
+
+# Delete virtual environment if requested
+if [[ "$DELETE_VENV" == "true" ]]; then
+    delete_venv
+fi
+
+# Clear cache if requested
+if [[ "$REMOVE_CACHE" == "true" ]]; then
+    clear_cache
+fi
+
+# Clear config if requested
+if [[ "$REMOVE_CONFIG" == "true" ]]; then
+    clear_config
+fi
+
+# Reinstall Poetry if requested
+if [[ "$INSTALL_POETRY" == "true" ]]; then
+    reinstall_poetry
+fi
+
+# Setup environment unless this is just a deletion operation
+if [[ "$OPERATION" != "delete" ]]; then
+    setup_environment
+fi
+
+print_message "info" "Operation completed successfully!"
+exit 0

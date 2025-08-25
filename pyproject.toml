@@ -11,7 +11,13 @@ dependencies = [
 ]
 
 [project.scripts]
-pipreqs-action = "github_action.main:main"
+pipreqs-action = "github_action.main:cli"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project.urls]
 Homepage = "https://github.com/jfheinrich-eu/pipreqs-action"
@@ -30,7 +36,7 @@ flake8 = "7.3.0"
 black = "25.1.0"
 isort = "6.0.1"
 pyupgrade = "3.20.0"
-pylint = "3.3.7"
+pylint = "3.3.8"
 mypy = "1.17.0"
 pre-commit = "4.3.0"
 
@@ -38,15 +44,13 @@ pre-commit = "4.3.0"
 [tool.poetry.group.testonly.dependencies]
 requests = "^2.32.4"
 pandas = "^2.3.2"
+pyyaml = "^6.0.2"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry.plugins."poetry.application.plugin"]
-export = "poetry_export.plugin:ExportPlugin"
-poethepoet = "poethepoet.plugin:PoePlugin"
-git_version = "poetry_git_version_plugin:GitVersionPlugin"
+[project.entry-points."poetry.application.plugin"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
@@ -115,17 +119,17 @@ exclude = '''
 /(\.git|__pycache__|build|dist|\.poetry|tests/test_app\.py)/
 '''
 
-[tool.poetry-git-version-plugin]
-release_type = "tag"
-
 [tool.poe.tasks]
 build = "poetry build"
 serve = "python -m http.server -d ./coverage/cov_html"
 requirements = "poetry export -f requirements.txt --without-hashes --all-groups -o requirements.txt"
 lint = "flake8 ."
-format_black = "black ."
-format_isort = "isort ."
-format = ["format_isort", "format_black"]
+format_black = "black src"
+format_isort = "isort src"
+format_tests_black = "black tests"
+format_tests_isort = "isort tests"
+format = ["format_isort", "format_black","format_tests_isort", "format_tests_black"]
+reset_venv = { cmd = "bash scripts/reset-poetry-venv" }
 
 [tool.poe.tasks.pre-commit]
 cmd = "pre-commit run --all-files"
