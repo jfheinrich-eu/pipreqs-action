@@ -1,5 +1,5 @@
 name: "Generate Python Requirements.txt"
-description: "Automatically generate requirements.txt for Python projects using pipreqs with smart duplicate handling"
+description: "Automate Python requirements and dependency management for CI/CD and DevOps workflows. Generates requirements.txt using pipreqs, with smart duplicate and version conflict handling."
 author: "Joerg Heinrich"
 
 inputs:

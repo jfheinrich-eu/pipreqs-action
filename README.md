@@ -9,11 +9,14 @@
 
 > **Note**: This project is a fork and enhancement of [ryan-rozario/pipreqs-action](https://github.com/ryan-rozario/pipreqs-action) with significant improvements and additional features.
 
-Automatically generates `requirements.txt` files for Python projects using [pipreqs](https://github.com/bndr/pipreqs) with enhanced duplicate handling, GitHub Actions integration, and comprehensive testing.
+Automated Python requirements and dependency management for CI/CD, DevOps, and package-management workflows. Uses pipreqs for fast, reliable automation of requirements.txt generation and continuous integration.
 
 ## ✨ Features
 
-- 🔄 **Automatic Requirements Generation**: Uses pipreqs to analyze Python imports
+- 🔄 **Python Dependency Management Automation**: Uses pipreqs to analyze imports and generate requirements
+- ⚡ **CI/CD & DevOps Integration**: Designed for continuous integration and DevOps workflows
+- 📦 **Package Management**: Handles requirements and dependencies for Python projects
+- 🛠️ **Automation**: Fully automated requirements.txt generation and updates
 - 🔍 **Recursive Scanning**: Optional recursive directory scanning
 - ⚡ **Duplicate Handling**: Intelligent handling of duplicate packages with different versions
 - ⚠️ **GitHub Warnings**: Automatic warnings in GitHub Actions logs for conflicts
@@ -232,26 +235,26 @@ monorepo/
 This action is available on the [GitHub Actions Marketplace](https://github.com/marketplace/actions/generate-python-requirements-txt). It falls under the following categories:
 
 ### 📦 **Dependency Management**
-- Automatically analyzes Python projects for dependencies
-- Generates clean, deduplicated requirements.txt files
-- Handles version conflicts intelligently
+- Automatically analyzes Python projects for dependencies and requirements
+- Generates clean, deduplicated requirements.txt files for package-management
+- Handles version conflicts intelligently for dependency-management
 
-### 🔧 **Continuous Integration**
-- Integrates seamlessly with GitHub Actions workflows
-- Provides detailed logging and error reporting
-- Supports various project structures and layouts
+## 🔧 **Continuous Integration**
+- Integrates seamlessly with GitHub Actions workflows for CI/CD
+- Provides detailed logging and error reporting for automation and DevOps
+- Supports various project structures and layouts for continuous-integration
 
-### 🐍 **Python Development**
-- Specialized for Python ecosystem
-- Works with all major Python package managers
+## 🐍 **Python Development**
+- Specialized for Python ecosystem and package-management
+- Works with all major Python package managers and dependency-management tools
 - Supports both standard library and third-party packages
 
-### 💡 **Usage Tips for Marketplace Users**
-
+## 💡 **Usage Tips for Marketplace Users**
 1. **Version Pinning**: Always use a specific version tag (e.g., `@v4.4.2`) for production workflows
 2. **Security**: Consider pinning to a specific commit SHA for maximum security
 3. **Testing**: Test the action in a feature branch before deploying to main workflows
 4. **Monitoring**: Enable GitHub Actions notifications to stay informed about workflow runs
+5. **SEO Keywords**: This action is ideal for Python developers, DevOps engineers, and CI/CD pipelines needing automated dependency and package management. It streamlines continuous integration and ensures up-to-date requirements for every workflow.
 
 ## 🤝 Contributing
 
@@ -287,3 +290,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   <a href="https://github.com/jfheinrich-eu/pipreqs-action/issues">Request Feature</a> •
   <a href="https://github.com/jfheinrich-eu/pipreqs-action/releases">Releases</a>
 </p>
+
+## 📈 Keywords
+
+python, requirements, dependencies, pipreqs, automation, ci-cd, package-management, devops, dependency-management, continuous-integration

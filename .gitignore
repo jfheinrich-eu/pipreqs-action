@@ -108,3 +108,5 @@ node_modules
 coverage/
 .ghtoken
 req.txt
+MARKETPLACE_SUMMARY.md
+MARKETPLACE.md
