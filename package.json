@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@template-tools/sync-cli": "^3.5.88"
+    "@template-tools/sync-cli": "^3.5.89"
   },
   "template": {
     "inheritFrom": [
