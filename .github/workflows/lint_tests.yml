@@ -10,7 +10,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: jfheinrich-eu/psono-secret-whisperer@v1.0.0
+      - uses: jfheinrich-eu/psono-secret-whisperer@v1.1.0
         id: psono-secrets
         with:
           ci_api_key_id: ${{ secrets.PSONO_API_KEY_ID }}
