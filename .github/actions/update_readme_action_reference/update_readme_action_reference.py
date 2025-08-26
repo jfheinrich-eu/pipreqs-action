@@ -1,6 +1,6 @@
 """This script updates the `readme_file.md` file to reference the latest tag of the GitHub Action.
 It finds the line that uses the action and replaces it with the latest tag and SHA.
-It assumes the action is referenced in the format `uses: jfheinrich-eu/github-daily-report@<tag>`.
+It assumes the action is referenced in the format `uses: jfheinrich-eu/pipreqs-action@<tag>`.
 The script is intended to be run in a GitHub Actions workflow or locally in a repository where the action is defined.
 """
 
@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 readme_file: Path
-ACTION: str = "jfheinrich-eu/github-daily-report"
+ACTION: str = "jfheinrich-eu/pipreqs-action"
 
 
 def get_and_check_readme() -> Path:
@@ -69,17 +69,16 @@ def get_tag_sha(tag: str) -> str:
 
 def main(readme_file: Path):
     """Main function to update the readme_file.md with the latest action tag."""
-    # Get the latest tag and its SHA
     tag = get_latest_tag()
     sha = get_tag_sha(tag)
-    new_line = f"  uses: {ACTION}@{sha}  # {tag}\n"
-
     content = readme_file.read_text().splitlines(keepends=True)
-    pattern = re.compile(rf"\s*uses:\s*{re.escape(ACTION)}@.*")
+    pattern = re.compile(rf"^(\s*-?\s*)uses:\s*{re.escape(ACTION)}@.*")
     changed = False
     for i, line in enumerate(content):
-        if pattern.match(line):
-            content[i] = new_line
+        match = pattern.match(line)
+        if match:
+            prefix = match.group(1)
+            content[i] = f"{prefix}uses: {ACTION}@{sha}  # {tag}\n"
             changed = True
             break
     if changed:
