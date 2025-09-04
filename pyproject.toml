@@ -30,7 +30,7 @@ Logo = "https://raw.githubusercontent.com/jfheinrich-eu/pipreqs-action/master/as
 packages = [{include = "github_action", from = "src"}]
 
 [tool.poetry.group.dev.dependencies]
-pytest = "8.4.1"
+pytest = "8.4.2"
 pytest-cov = "6.2.1"
 flake8 = "7.3.0"
 black = "25.1.0"
