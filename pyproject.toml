@@ -33,7 +33,7 @@ packages = [{include = "github_action", from = "src"}]
 pytest = "8.4.1"
 pytest-cov = "6.2.1"
 flake8 = "7.3.0"
-black = "25.1.0"
+black = "25.9.0"
 isort = "6.0.1"
 pyupgrade = "3.20.0"
 pylint = "3.3.8"
