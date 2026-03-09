@@ -1,5 +1,5 @@
 # Stage 1: Build base image
-FROM python:3.12.11-alpine3.22 AS base
+FROM python:3.12.13-alpine3.22 AS base
 
 ENV GIT_VERSION=2.50.0
 
@@ -32,7 +32,7 @@ RUN <<EOF
 EOF
 
 # Stage 2: Final base image
-FROM python:3.12.11-alpine3.22 AS final_base
+FROM python:3.12.13-alpine3.22 AS final_base
 COPY --from=base /opt/git /opt/git
 ENV PATH="/opt/git/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/opt/git/lib"
@@ -40,7 +40,7 @@ ENV LD_LIBRARY_PATH="/opt/git/lib"
 CMD ["python3"]
 
 # Stage 3: Application build image
-FROM python:3.12.11-alpine3.22 AS builder
+FROM python:3.12.13-alpine3.22 AS builder
 COPY --from=final_base /opt/git /opt/git
 ENV PATH="/opt/git/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/opt/git/lib"
@@ -74,7 +74,7 @@ RUN find . -name "*.pyc" -delete && \
     find . -name "coverage.xml" -delete
 
 # Stage 4: Final application image
-FROM python:3.12.11-alpine3.22 AS final
+FROM python:3.12.13-alpine3.22 AS final
 COPY --from=builder /opt/git /opt/git
 COPY --from=builder /app /app
 ENV PATH="/opt/git/bin:${PATH}"
